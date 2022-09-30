@@ -27,12 +27,24 @@ return
 
 
 oui:
-MsgBox oui
+oui := GenerateRandomString()
+MsgBox %oui%
 return
 
 
 
+GenerateRandomString(length = 25) {
 
+characters := "abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ0123456789"
+StringSplit, chars, characters
+
+Loop, %length%
+{
+	Random, rand, 0, 64
+	password .= chars%rand%
+}
+return password
+}
 
 
 
