@@ -9,7 +9,7 @@ pToken:=Gdip_Startup()
 
 
 
-Main := new Custom_Window( x:= 500, y:= 500 , w:= 350, h:= 255, name:= "1", option:= "+Alwaysontop -Caption", title:="demo test", background_bitmap:= HB_BITMAP_MAKER() )
+Main := new Custom_Window( x:= 500, y:= 500 , w:= 350, h:= 255, name:= "1", option:= "+Alwaysontop -Caption", title:="Connector", background_bitmap:= HB_BITMAP_MAKER() )
 ;HB_Button.Push(New Button_Type_69(x:=130,y:=90,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_Minimize(x:=300,y:=10,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_Exit(x:=320,y:=10,w:=15,h:=15,Window:="1",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
