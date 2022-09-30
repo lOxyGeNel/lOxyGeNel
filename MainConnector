@@ -1,22 +1,21 @@
 #SingleInstance force
 SetBatchLines,-1
-filedelete, main.ahk
-
-
 global HB_Button:=[]
 pToken:=Gdip_Startup()
 
 
-
-
-Main := new Custom_Window( x:= 500, y:= 500 , w:= 350, h:= 255, name:= "1", option:= "+Alwaysontop -Caption", title:="Connector", background_bitmap:= HB_BITMAP_MAKER() )
-;HB_Button.Push(New Button_Type_69(x:=130,y:=90,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+Main := new Custom_Window( x:= 500, y:= 500 , w:= 350, h:= 255, name:= "1", option:= "+Alwaysontop -Caption", title:="demo test", background_bitmap:= HB_BITMAP_MAKER() )
+HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_Minimize(x:=300,y:=10,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_Exit(x:=320,y:=10,w:=15,h:=15,Window:="1",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
 Gui, Font, s9 Bold, Comfortaa
 Gui,1:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
-Gui,1:Add,button,x50 y50 w30 h27 goui,
-Gui,1:Add, Progress, x26 y83 h4 w299 +BackgroundTrans vkik hidden, 0
 Gui,1:Color,00FF00
 WinSet, Transcolor, 00FF00
 Main.Show_Window()
@@ -27,24 +26,8 @@ return
 
 
 oui:
-oui := GenerateRandomString()
-MsgBox %oui%
+MsgBox oui
 return
-
-
-
-GenerateRandomString(length = 25) {
-
-characters := "abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ0123456789"
-StringSplit, chars, characters
-
-Loop, %length%
-{
-	Random, rand, 0, 64
-	password .= chars%rand%
-}
-return password
-}
 
 
 
@@ -103,26 +86,43 @@ WinMinimize
 return
 Exit:
 Esc::
+FileDelete,Main.ahk
 ExitApp
 
 
 
 HB_BITMAP_MAKER(){
-	;Bitmap Created Using: HB Bitmap Maker
+
 	pBitmap:=Gdip_CreateBitmap( 350 , 500 )
 	G := Gdip_GraphicsFromImage( pBitmap )
 	Gdip_SetSmoothingMode( G , 9 )
 	;Border
 	Brush := Gdip_CreateLineBrush( 230 , 350 , 100 , 100 , "0xFF111111" , "0xFF222222" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 4 , 4 , 343 , 251 , 9 )
+	Gdip_FillRoundedRectangle( G , Brush , 4 , 4 , 343 , 235 , 9 )
 	Gdip_DeleteBrush( Brush )
 	;Background
 	Brush := Gdip_CreateLineBrushFromRect( 0 , 0 , 1 , 120 , "0xFF000000" , "0xFF6E0E2D" , 1 , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 5 , 5 , 341 , 249 , 9 )
+	Gdip_FillRoundedRectangle( G , Brush , 5 , 5 , 341 , 233 , 9 )
+	Gdip_DeleteBrush( Brush )
+	;BG MENU
+	Brush := Gdip_BrushCreateSolid( "0xFF000000" )
+	Gdip_FillRoundedRectangle( G , Brush , 14 , 39 , 105 , 185 , 5 )
+	Gdip_DeleteBrush( Brush )
+	;BG MENU
+	Brush := Gdip_CreateLineBrush( 230 , 350 , 100 , 100 , "0xFF111111" , "0xFF222222" , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 15 , 40 , 103 , 183 , 4 )
+	Gdip_DeleteBrush( Brush )
+	;BG MENU
+	Brush := Gdip_BrushCreateSolid( "0xFF000000" )
+	Gdip_FillRoundedRectangle( G , Brush , 133 , 39 , 203 , 186 , 5 )
+	Gdip_DeleteBrush( Brush )
+	;BG MENU
+	Brush := Gdip_CreateLineBrush( 230 , 350 , 100 , 100 , "0xFF111111" , "0xFF222222" , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 134 , 40 , 201 , 184 , 4 )
 	Gdip_DeleteBrush( Brush )
 	;Background
 	Brush := Gdip_BrushCreateHatch( "0x4D000000" , "0x00000000" , 3 )
-	Gdip_FillRoundedRectangle( G , Brush , 5 , 5 , 341 , 249 , 9 )
+	Gdip_FillRoundedRectangle( G , Brush , 5 , 5 , 341 , 234 , 9 )
 	Gdip_DeleteBrush( Brush )
 	;Login
 	Brush := Gdip_BrushCreateSolid( "0xFF333333" )
@@ -150,16 +150,16 @@ HB_BITMAP_MAKER(){
 	Gdip_TextToGraphics( G , "CONNECTOR" , "s14  vCenter Bold c" Brush " x20 y11" , "Comfortaa" , 220 , 20 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 200 , 0 , 151 , "0xFF333333" , "0xFF252525" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 8 , 249 , 335 , 5 , 2 )
+	Gdip_FillRoundedRectangle( G , Brush , 8 , 233 , 335 , 5 , 2 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFF252525" )
-	Gdip_FillRectangle( G , Brush , 6 , 249 , 340 , 3 )
+	Gdip_FillRectangle( G , Brush , 6 , 233 , 340 , 3 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateHatch( "0x4D000000" , "0x00000000" , 2 )
-	Gdip_FillRectangle( G , Brush , 6 , 249 , 340 , 3 )
+	Gdip_FillRectangle( G , Brush , 6 , 233 , 340 , 3 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateHatch( "0x4d000000" , "0x0D000000" , 2 )
-	Gdip_FillRoundedRectangle( G , Brush , 7 , 249 , 336 , 5 , 2 )
+	Gdip_FillRoundedRectangle( G , Brush , 7 , 233 , 336 , 5 , 2 )
 	Gdip_DeleteBrush( Brush )
 	Gdip_DeleteGraphics( G )
 	return pBitmap
@@ -215,6 +215,7 @@ HB_Hover_Function(){
 			HB_Button[Index].Draw_Default(),Hover_On:=0
 }
 
+
 class Button_Type_69	{
 	__New(x:=10, y:=10, w:=90, h:=25, Window:="1", Label:="", Text:="Button", Font:="Arial", Font_Size:="10 Bold",Font_Color_Top:="000000",Font_Color_Bottom:="FFFFFF",Button_Background_Color:="F0F0F0",RoundNess:=2){
 		This.X:=x
@@ -253,10 +254,10 @@ class Button_Type_69	{
 	pBitmap:=Gdip_CreateBitmap( 88 , 23 )
 	G := Gdip_GraphicsFromImage( pBitmap )
 	Gdip_SetSmoothingMode( G , 4 )
-	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 50 , "0xFF320F10" , "0xFF000000" , 1 )
+	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 50 , "0xFF222222" , "0xFF222222" , 1 )
 	Gdip_FillRectangle( G , Brush , -2 , -3 , 120 , 60 )
 	Gdip_DeleteBrush( Brush )
-	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
+	Brush := Gdip_BrushCreateSolid( "0xFFAC1B34" )
 	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFF2A2A2A" )
@@ -278,10 +279,10 @@ class Button_Type_69	{
 	pBitmap:=Gdip_CreateBitmap( 88 , 23 )
 	G := Gdip_GraphicsFromImage( pBitmap )
 	Gdip_SetSmoothingMode( G , 4 )
-	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 100 , "0xFF320F10" , "0xFF000000" , 1 )
+	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 100 , "0xFF222222" , "0xFF222222" , 1 )
 	Gdip_FillRectangle( G , Brush , -10 , -10 , 150 , 80 )
 	Gdip_DeleteBrush( Brush )
-	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
+	Brush := Gdip_BrushCreateSolid( "0xFFAC1B34" )
 	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFF333333" )
@@ -307,10 +308,10 @@ class Button_Type_69	{
 	pBitmap:=Gdip_CreateBitmap( 88 , 23 )
 	G := Gdip_GraphicsFromImage( pBitmap )
 	Gdip_SetSmoothingMode( G , 4 )
-	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 50 , "0xFF320F10" , "0xFF000000" , 1 )
+	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 50 , "0xFF222222" , "0xFF222222" , 1 )
 	Gdip_FillRectangle( G , Brush , -10 , -12 , 110 , 70 )
 	Gdip_DeleteBrush( Brush )
-	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
+	Brush := Gdip_BrushCreateSolid( "0xFFAC1B34" )
 	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFF333333" )
