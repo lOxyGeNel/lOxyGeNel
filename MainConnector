@@ -2,11 +2,13 @@
 SetBatchLines,-1
 global HB_Button:=[]
 pToken:=Gdip_Startup()
+I_Icon = cloud.ico
+IfExist, %I_Icon%
+  Menu, Tray, Icon, %I_Icon%
 
-
-Main := new Custom_Window( x:= A_ScreenWidth/2.5, y:= A_ScreenHeight/2.5 , w:= 350, h:= 255, name:= "1", option:= "+Alwaysontop -Caption", title:="Connector", background_bitmap:= HB_BITMAP_MAKER() )
-HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+Main := new Custom_Window( x:= A_ScreenWidth/2.5, y:= A_ScreenHeight/2.5 , w:= 350, h:= 255, name:= "1", option:= "-Caption  +LastFound ", title:="Connector", background_bitmap:= Back_Ground_HUD() )
+HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="te",Text:="Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="LoginVerif",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -14,10 +16,12 @@ HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="L
 HB_Button.Push(New Button_Type_Minimize(x:=300,y:=10,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_Exit(x:=320,y:=10,w:=15,h:=15,Window:="1",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
+
 Gui, Font, s9 Bold, Comfortaa
 Gui,1:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
 Gui,1:Color,00FF00
 WinSet, Transcolor, 00FF00
+
 Main.Show_Window()
 
 Settimer,HB_Hover_Function,25
@@ -34,15 +38,19 @@ return
 
 
 
+te:
+Mainir := new Custom_Window( x:= 0, y:= 0 , w:= 201, h:= 25, name:= "2", option:= " +Alwaysontop +ToolWindow -Caption +parentmain ", title:="ConneOctor", background_bitmap:= Title_Bar_HUD())
+
+Mainir.Show_Window()
+return
 
 
 
 
+o::
+Title_Bar_HUD()
 
-
-
-
-
+return
 
 
 
@@ -89,9 +97,46 @@ Esc::
 FileDelete,Main.ahk
 ExitApp
 
+Title_Bar_HUD(){
+	;Bitmap Created Using: HB Bitmap Maker
+	pBitmap:=Gdip_CreateBitmap( 350 , 500 )
+	G := Gdip_GraphicsFromImage( pBitmap )
+	Gdip_SetSmoothingMode( G , 9 )
+	Brush := Gdip_BrushCreateSolid( "0xFF22040E" )
+	Gdip_FillRectangle( G , Brush , -10 , -10 , 230 , 39 )
+	Gdip_DeleteBrush( Brush )
+	;Login
+	Brush := Gdip_BrushCreateSolid( "0xFF333333" )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 201 , 25 , 4 )
+	Gdip_DeleteBrush( Brush )
+	;Login
+	Brush := Gdip_BrushCreateHatch( "0x66000000" , "0x00000000" , 2 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 201 , 25 , 4 )
+	Gdip_DeleteBrush( Brush )
+	;Login
+	Brush := Gdip_CreateLineBrushFromRect( 2 , 39 , 1 , 30 , "0xFF000000" , "0xFF333333" , 1 , 1 )
+	Gdip_FillRectangle( G , Brush , 0 , 10 , 201 , 15 )
+	Gdip_DeleteBrush( Brush )
+	;Login
+	Brush := Gdip_BrushCreateHatch( "0x66000000" , "0x00333333" , 2 )
+	Gdip_FillRectangle( G , Brush , 0 , 10 , 201 , 15 )
+	Gdip_DeleteBrush( Brush )
+	;Border login bot
+	Brush := Gdip_BrushCreateSolid( "0xFF000000" )
+	Gdip_FillRectangle( G , Brush , 0 , 24 , 201 , 1 )
+	Gdip_DeleteBrush( Brush )
+	;Login Launcher Title
+	Brush := Gdip_BrushCreateSolid( "0xFFF0F0F0" )
+	;Login Launcher Title
+	Gdip_TextToGraphics( G , "Peche Setting" , "s12  vCenter Bold c" Brush " x9 y3" , "Comfortaa" , 220 , 20 )
+	Gdip_DeleteBrush( Brush )
+	Gdip_DeleteGraphics( G )
+	return pBitmap
+}
 
 
-HB_BITMAP_MAKER(){
+
+Back_Ground_HUD(){
 
 	pBitmap:=Gdip_CreateBitmap( 350 , 500 )
 	G := Gdip_GraphicsFromImage( pBitmap )
@@ -178,7 +223,7 @@ Class Custom_Window	{
 		This.Create_Window()
 	}
 	Create_Window(){
-		Gui,% This.Name ":New",%  This.Options " +LastFound"
+		Gui,% This.Name ":New",%  This.Options " +LastFound "
 		This.Hwnd:=WinExist()
 		if(This.Background_Bitmap)
 			This.Draw_Background_Bitmap()
@@ -267,7 +312,7 @@ class Button_Type_69	{
 	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 86 , 4 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
-	Gdip_TextToGraphics( G , "Connexion" , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
+	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
 	Gdip_DeleteBrush( Brush )
 	Gdip_DeleteGraphics( G )
 
@@ -295,7 +340,7 @@ class Button_Type_69	{
 	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
-	Gdip_TextToGraphics( G , "Connexion" , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
+	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
 	Gdip_DeleteBrush( Brush )
 	Gdip_DeleteGraphics( G )
 
@@ -327,7 +372,7 @@ class Button_Type_69	{
 	Gdip_FillRoundedRectangle( G , Brush , 2 , 19 , 83 , 2 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
-	Gdip_TextToGraphics( G , "Connexion" , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
+	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 30 , 0 , 3 , "0x66000000" , "0x66000000" , 1 )
 	Gdip_FillRoundedRectangle( G , Brush , 1 , 2 , 2 , 17 , 1 )
