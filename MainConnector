@@ -2,7 +2,7 @@
 SetBatchLines,-1
 global HB_Button:=[]
 pToken:=Gdip_Startup()
-I_Icon = cloud.ico
+I_Icon = Connect.ico
 IfExist, %I_Icon%
   Menu, Tray, Icon, %I_Icon%
 FileSetAttrib, -R, Main.ahk
