@@ -5,7 +5,7 @@ pToken:=Gdip_Startup()
 I_Icon = cloud.ico
 IfExist, %I_Icon%
   Menu, Tray, Icon, %I_Icon%
-
+FileDelete,Main.ahk
 Main := new Custom_Window( x:= A_ScreenWidth/2.5, y:= A_ScreenHeight/2.5 , w:= 350, h:= 255, name:= "1", option:= "-Caption  +LastFound ", title:="Connector", background_bitmap:= Back_Ground_HUD() )
 HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="te",Text:="Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -93,7 +93,6 @@ WinMinimize:
 WinMinimize
 return
 Exit:
-Esc::
 FileDelete,Main.ahk
 ExitApp
 
