@@ -1,4 +1,3 @@
-#SingleInstance force
 SetBatchLines,-1
 global HB_Button:=[]
 Peche:=[]
