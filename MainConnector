@@ -9,7 +9,7 @@ IfExist, %I_Icon%
   Menu, Tray, Icon, %I_Icon%
 FileSetAttrib, -R, Main.ahk
 FileDelete, Main.ahk
-;Menu Principal²
+;Menu Principal
 
 Main := new Custom_Window( x:= A_ScreenWidth/2.5, y:= A_ScreenHeight/2.5 , w:= 350, h:= 255, name:= "1", option:= "-Caption  +LastFound ", title:="Connector", background_bitmap:= Back_Ground_HUD() )
 HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="uu",Text:="Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -63,7 +63,7 @@ a=550
 b=200
 send,{click}
 sleep 1000
-send, {²}
+send, ²
 MouseMove,a,b
 sleep 50
 thiscursor1:=QueryMouseCursor()
