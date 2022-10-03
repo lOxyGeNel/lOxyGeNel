@@ -1,5 +1,6 @@
 #SingleInstance force
-SetBatchLines,-1
+SetBatchLines -1
+SendMode Input
 global HB_Button:=[]
 Peche:=[]
 pToken:=Gdip_Startup()
@@ -8,18 +9,18 @@ IfExist, %I_Icon%
   Menu, Tray, Icon, %I_Icon%
 FileSetAttrib, -R, Main.ahk
 FileDelete, Main.ahk
-;Menu Principal
+;Menu Principal²
 
 Main := new Custom_Window( x:= A_ScreenWidth/2.5, y:= A_ScreenHeight/2.5 , w:= 350, h:= 255, name:= "1", option:= "-Caption  +LastFound ", title:="Connector", background_bitmap:= Back_Ground_HUD() )
-HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="te",Text:="Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="tes",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="find",Text:="Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="tes",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Version",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_Minimize(x:=300,y:=10,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_Exit(x:=320,y:=10,w:=15,h:=15,Window:="1",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-
+;HB_Button.Push(New Button_Type_69(x:=190,y:=190,w:=90,h:=25,Window:="1",Label:="Star",Text:="Start",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 
 
@@ -35,8 +36,83 @@ return
 
 
 
-oui:
-MsgBox oui
+
+
+
+Find:
+prefix_list = playback:,capture:
+Loop, Parse, prefix_list, `,
+{
+    Loop {
+        if !(device := VA_GetDevice(A_Index))
+            break
+        device_list .= A_Index "=" VA_GetDeviceName(device) "`n"
+
+    }
+}
+MsgBox % device_list
+return
+star:
+return
+start:
+a=550
+b=200
+send,{click}
+sleep 1000
+send, {²}
+MouseMove,a,b
+sleep 50
+thiscursor1:=QueryMouseCursor()
+Loop{
+thiscursor:=QueryMouseCursor()
+if (thiscursor=thiscursor1)
+{
+a+=0.5
+	MouseMove,a,b
+	if (a>=1450)
+        {
+		b+=30
+		a=400
+        }
+    if (b>=750)
+        {
+		b=300
+        }
+}
+else
+	break
+}
+sleep 500
+audioMeter := VA_GetAudioMeter("playback:5")
+VA_IAudioMeterInformation_GetMeteringChannelCount(audioMeter, 1)
+VA_GetDevicePeriod("capture", devicePeriod)
+Loop
+{
+    ; Get the peak value across all channels.
+    VA_IAudioMeterInformation_GetPeakValue(audioMeter, peakValue)
+    meter := MakeMeter(peakValue, MeterLength)
+
+    ; Get the peak values of all channels.
+    VarSetCapacity(peakValues, channelCount*4)
+    VA_IAudioMeterInformation_GetChannelsPeakValues(audioMeter, 1, &peakValues)
+    Loop %channelCount%
+        meter.= "" MakeMeter(NumGet(peakValues, A_Index*4-4, "float"), MeterLength)
+
+    ToolTip, %meter% %StartTime% ,0,0
+    Sleep, %devicePeriod%
+
+   if (A_TimeIdle > 25000)
+    {
+    goto start
+}
+	if (meter>=0.20)
+	{
+    sleep 1000
+    goto start
+}
+
+}
+
 return
 
 
@@ -44,9 +120,6 @@ return
 
 
 
-te:
-InterfacePecheShow()
-return
 
 
 
@@ -56,8 +129,22 @@ return
 
 
 
-
-
+QueryMouseCursor()
+{
+	NumPut(VarSetCapacity(CurrentCursorStruct, A_PtrSize + 16), CurrentCursorStruct, "uInt")
+	DllCall("GetCursorInfo", "ptr", &CurrentCursorStruct)
+	return (numP:=NumGet(CurrentCursorStruct,  8))
+}
+	MakeMeter(fraction, size)
+{
+    global MeterLength
+    Loop % fraction*size
+        meter .= "|"
+    Loop % (1-fraction)*size
+        meter .= "."
+    meter .= "  " fraction
+    return meter
+}
 
 
 
@@ -101,6 +188,16 @@ Esc::
 FileSetAttrib, -R, Main.ahk
 FileDelete, Main.ahk
 ExitApp
+
+
+
+
+
+
+
+
+
+
 
 Title_Bar_HUD(){
 	;Bitmap Created Using: HB Bitmap Maker
@@ -696,55 +793,153 @@ class Button_Type_Exit	{
 
 
 
+;##########################################################################################################################################################################
+;########################################################################################################################################################################## VA - TRACKER SOUND
+;##########################################################################################################################################################################
+VA_GetAudioMeter(device_desc="playback")
+{
+    if ! device := VA_GetDevice(device_desc)
+        return 0
+    VA_IMMDevice_Activate(device, "{C02216F6-8C67-4B5B-9D00-D008E73E0064}", 7, 0, audioMeter)
+    ObjRelease(device)
+    return audioMeter
+}
+VA_IAudioMeterInformation_GetMeteringChannelCount(this, ByRef ChannelCount) {
+    return DllCall(NumGet(NumGet(this+0)+4*A_PtrSize), "ptr", this, "uint*", ChannelCount)
+}
+VA_GetDevicePeriod(device_desc, ByRef default_period, ByRef minimum_period="")
+{
+    defaultPeriod := minimumPeriod := 0
+    if ! device := VA_GetDevice(device_desc)
+        return false
+    VA_IMMDevice_Activate(device, "{1CB9AD4C-DBFA-4c32-B178-C2F568A703B2}", 7, 0, audioClient)
+    ObjRelease(device)
+    ; IAudioClient::GetDevicePeriod
+    DllCall(NumGet(NumGet(audioClient+0)+9*A_PtrSize), "ptr",audioClient, "int64*",default_period, "int64*",minimum_period)
+    ; Convert 100-nanosecond units to milliseconds.
+    default_period /= 10000
+    minimum_period /= 10000
+    ObjRelease(audioClient)
+    return true
+}
+VA_IAudioMeterInformation_GetPeakValue(this, ByRef Peak) {
+    return DllCall(NumGet(NumGet(this+0)+3*A_PtrSize), "ptr", this, "float*", Peak)
+}
+VA_IAudioMeterInformation_GetChannelsPeakValues(this, ChannelCount, PeakValues) {
+    return DllCall(NumGet(NumGet(this+0)+5*A_PtrSize), "ptr", this, "uint", ChannelCount, "ptr", PeakValues)
+}
+VA_GetDevice(device_desc="playback")
+{
+    static CLSID_MMDeviceEnumerator := "{BCDE0395-E52F-467C-8E3D-C4579291692E}"
+        , IID_IMMDeviceEnumerator := "{A95664D2-9614-4F35-A746-DE8DB63617E6}"
+    if !(deviceEnumerator := ComObjCreate(CLSID_MMDeviceEnumerator, IID_IMMDeviceEnumerator))
+        return 0
 
+    device := 0
 
+    if VA_IMMDeviceEnumerator_GetDevice(deviceEnumerator, device_desc, device) = 0
+        goto VA_GetDevice_Return
 
+    if device_desc is integer
+    {
+        m2 := device_desc
+        if m2 >= 4096 ; Probably a device pointer, passed here indirectly via VA_GetAudioMeter or such.
+        {
+            ObjAddRef(device := m2)
+            goto VA_GetDevice_Return
+        }
+    }
+    else
+        RegExMatch(device_desc, "(.*?)\s*(?::(\d+))?$", m)
 
+    if m1 in playback,p
+        m1 := "", flow := 0 ; eRender
+    else if m1 in capture,c
+        m1 := "", flow := 1 ; eCapture
+    else if (m1 . m2) = ""  ; no name or number specified
+        m1 := "", flow := 0 ; eRender (default)
+    else
+        flow := 2 ; eAll
 
+    if (m1 . m2) = ""   ; no name or number (maybe "playback" or "capture")
+    {
+        VA_IMMDeviceEnumerator_GetDefaultAudioEndpoint(deviceEnumerator, flow, 0, device)
+        goto VA_GetDevice_Return
+    }
 
+    VA_IMMDeviceEnumerator_EnumAudioEndpoints(deviceEnumerator, flow, 1, devices)
 
+    if m1 =
+    {
+        VA_IMMDeviceCollection_Item(devices, m2-1, device)
+        goto VA_GetDevice_Return
+    }
 
+    VA_IMMDeviceCollection_GetCount(devices, count)
+    index := 0
+    Loop % count
+        if VA_IMMDeviceCollection_Item(devices, A_Index-1, device) = 0
+            if InStr(VA_GetDeviceName(device), m1) && (m2 = "" || ++index = m2)
+                goto VA_GetDevice_Return
+            else
+                ObjRelease(device), device:=0
 
+VA_GetDevice_Return:
+    ObjRelease(deviceEnumerator)
+    if devices
+        ObjRelease(devices)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return device ; may be 0
+}
+VA_IMMDevice_Activate(this, iid, ClsCtx, ActivationParams, ByRef Interface) {
+    return DllCall(NumGet(NumGet(this+0)+3*A_PtrSize), "ptr", this, "ptr", VA_GUID(iid), "uint", ClsCtx, "uint", ActivationParams, "ptr*", Interface)
+}
+VA_IMMDeviceEnumerator_GetDevice(this, id, ByRef Device) {
+    return DllCall(NumGet(NumGet(this+0)+5*A_PtrSize), "ptr", this, "wstr", id, "ptr*", Device)
+}
+VA_IMMDeviceEnumerator_GetDefaultAudioEndpoint(this, DataFlow, Role, ByRef Endpoint) {
+    return DllCall(NumGet(NumGet(this+0)+4*A_PtrSize), "ptr", this, "int", DataFlow, "int", Role, "ptr*", Endpoint)
+}
+VA_IMMDeviceEnumerator_EnumAudioEndpoints(this, DataFlow, StateMask, ByRef Devices) {
+    return DllCall(NumGet(NumGet(this+0)+3*A_PtrSize), "ptr", this, "int", DataFlow, "uint", StateMask, "ptr*", Devices)
+}
+VA_IMMDeviceCollection_Item(this, Index, ByRef Device) {
+    return DllCall(NumGet(NumGet(this+0)+4*A_PtrSize), "ptr", this, "uint", Index, "ptr*", Device)
+}
+VA_IMMDeviceCollection_GetCount(this, ByRef Count) {
+    return DllCall(NumGet(NumGet(this+0)+3*A_PtrSize), "ptr", this, "uint*", Count)
+}
+VA_GetDeviceName(device)
+{
+    static PKEY_Device_FriendlyName
+    if !VarSetCapacity(PKEY_Device_FriendlyName)
+        VarSetCapacity(PKEY_Device_FriendlyName, 20)
+        ,VA_GUID(PKEY_Device_FriendlyName :="{A45C254E-DF1C-4EFD-8020-67D146A850E0}")
+        ,NumPut(14, PKEY_Device_FriendlyName, 16)
+    VarSetCapacity(prop, 16)
+    VA_IMMDevice_OpenPropertyStore(device, 0, store)
+    ; store->GetValue(.., [out] prop)
+    DllCall(NumGet(NumGet(store+0)+5*A_PtrSize), "ptr", store, "ptr", &PKEY_Device_FriendlyName, "ptr", &prop)
+    ObjRelease(store)
+    VA_WStrOut(deviceName := NumGet(prop,8))
+    return deviceName
+}
+VA_GUID(ByRef guid_out, guid_in="%guid_out%") {
+    if (guid_in == "%guid_out%")
+        guid_in :=   guid_out
+    if  guid_in is integer
+        return guid_in
+    VarSetCapacity(guid_out, 16, 0)
+	DllCall("ole32\CLSIDFromString", "wstr", guid_in, "ptr", &guid_out)
+	return &guid_out
+}
+VA_IMMDevice_OpenPropertyStore(this, Access, ByRef Properties) {
+    return DllCall(NumGet(NumGet(this+0)+4*A_PtrSize), "ptr", this, "uint", Access, "ptr*", Properties)
+}
+VA_WStrOut(ByRef str) {
+    str := StrGet(ptr := str, "UTF-16")
+    DllCall("ole32\CoTaskMemFree", "ptr", ptr)  ; FREES THE STRING.
+}
 
 ; Gdip standard library v1.45 by tic (Tariq Porter) 07/09/11
 ; Modifed by Rseding91 using fincs 64 bit compatible Gdip library 5/1/2013
