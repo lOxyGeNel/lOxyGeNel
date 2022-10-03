@@ -1,3 +1,4 @@
+#SingleInstance force
 SetBatchLines,-1
 global HB_Button:=[]
 Peche:=[]
@@ -5,8 +6,8 @@ pToken:=Gdip_Startup()
 I_Icon = Connect.ico
 IfExist, %I_Icon%
   Menu, Tray, Icon, %I_Icon%
-FileSetAttrib, -R, Main.oxgn
-FileDelete, Main.oxgn
+FileSetAttrib, -R, Main.ahk
+FileDelete, Main.ahk
 ;Menu Principal
 
 Main := new Custom_Window( x:= A_ScreenWidth/2.5, y:= A_ScreenHeight/2.5 , w:= 350, h:= 255, name:= "1", option:= "-Caption  +LastFound ", title:="Connector", background_bitmap:= Back_Ground_HUD() )
@@ -97,8 +98,8 @@ WinMinimize
 return
 Exit:
 Esc::
-FileSetAttrib, -R, Main.oxgn
-FileDelete, Main.oxgn
+FileSetAttrib, -R, Main.ahk
+FileDelete, Main.ahk
 ExitApp
 
 Title_Bar_HUD(){
