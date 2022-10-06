@@ -96,13 +96,13 @@ MenuPecheShow=0
 
 Gui, MenuPecheAvance:new
 Gui,+hwndMenuPecheAvance +ToolWindow -Caption +Parent1 +lastfound
-HB_Button.Push(New Button_Type_69(x:=10,y:=5,w:=80,h:=35,Window:="MenuPecheAvance",Label:="Zone",Text:="Délimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y:=5,w:=80,h:=35,Window:="MenuPecheAvance",Label:="Zone",Text:="Delimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x+=+100,y:=5,w:=80,h:=35,Window:="MenuPecheAvance",Label:="DrawZone",Text:="Afficher Zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=57,y:=155,w:=90,h:=22,Window:="MenuPecheAvance",Label:="Save",Text:="Sauvegarder",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 HB_Button.Push(New Message(x:=20,y:=47,w:=65,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Monture",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Message(x:=120,y:=47,w:=65,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Appâts",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Message(x:=45,y:=97,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Canne à Pêche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=120,y:=47,w:=65,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Appats",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=45,y:=97,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Canne à Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 Gui, Font, s9 bold, Comfortaa
 Gui, MenuPecheAvance:Add, Text, x15  y148    w170   h1    0x4
 Gui, MenuPecheAvance:Add, Text, x15  y45    w170   h1    0x4
@@ -245,7 +245,7 @@ pBrush := Gdip_BrushCreateSolid(0xaa000000)
 Gdip_FillRoundedRectangle(G, pBrush, 0, 0, Width, Height, 20)
 Gdip_DeleteBrush(pBrush)
 Options = x10p y20p w80p Centre cffffffff r4 s50 Underline Italic
-Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Délimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
+Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Delimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
 UpdateLayeredWindow(hwnd1, hdc, (A_ScreenWidth-Width)//2, (A_ScreenHeight-Height)//2, Width, Height)
 SelectObject(hdc, obm)
 DeleteObject(hbm)
