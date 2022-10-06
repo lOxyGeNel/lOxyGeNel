@@ -37,10 +37,6 @@ IniRead, HotkeyMonture ,Setting.ini, Raccourcis , Monture
 IniRead, HotkeyAppats ,Setting.ini, Raccourcis , Appats
 IniRead, HotkeyCanne ,Setting.ini, Raccourcis , Canne
 
-x1F=%xCoord%
-y1F=%yCoord%
-x2F:=(xCoord + wCoord)
-y2F:=(yCoord + hCoord)
 
 
 gui,1:new
@@ -164,6 +160,10 @@ VerifWoW()
 if (WowAbs=1)
     return
 WinMinimize, Connector
+x1F=%xCoord%
+y1F=%yCoord%
+x2F:=(xCoord + wCoord)
+y2F:=(yCoord + hCoord)
 PecheWow()
 return
 
@@ -229,6 +229,7 @@ return
 
 
 Zone:
+OnOff=0
 VerifWoW()
 if (WowAbs=1)
     return
@@ -351,7 +352,7 @@ else
 	break
 }
 sleep 1000
-audioMeter := VA_GetAudioMeter("playback:5")
+audioMeter := VA_GetAudioMeter("playback:2")
 VA_IAudioMeterInformation_GetMeteringChannelCount(audioMeter, 1)
 VA_GetDevicePeriod("capture", devicePeriod)
 Loop
