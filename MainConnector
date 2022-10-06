@@ -1,37 +1,140 @@
 #SingleInstance force
 SetBatchLines -1
 SendMode Input
-global HB_Button:=[]
-Peche:=[]
+CoordMode, window
+
 pToken:=Gdip_Startup()
+global HB_Button:=[]
+global HB_Switch:=[]
+
+global SS_BLACKRECT   := 0x4       ; displays a frame around the control and fills the control with a solid color that is the same color as the Window Frame (COLOR_WINDOWFRAME).
+global SS_GRAYRECT    := 0x5
+
+
 I_Icon = Connect.ico
 IfExist, %I_Icon%
   Menu, Tray, Icon, %I_Icon%
 FileSetAttrib, -R, Main.ahk
 FileDelete, Main.ahk
-;Menu Principal
 
-Main := new Custom_Window( x:= A_ScreenWidth/2.5, y:= A_ScreenHeight/2.5 , w:= 350, h:= 255, name:= "1", option:= "-Caption  +LastFound ", title:="Connector", background_bitmap:= Back_Ground_HUD() )
-HB_Button.Push(New Button_Type_69(x:=22,y:=47,w:=90,h:=25,Window:="1",Label:="uu",Text:="Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="tes",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-;HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=22,y+=+29,w:=90,h:=25,Window:="1",Label:="te",Text:="Version",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_Minimize(x:=300,y:=10,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_Exit(x:=320,y:=10,w:=15,h:=15,Window:="1",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-;HB_Button.Push(New Button_Type_69(x:=190,y:=190,w:=90,h:=25,Window:="1",Label:="Star",Text:="Start",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+hBitmap := Gdip_CreateHBITMAPFromBitmap(Back_Ground_HUD())
+
+
+xWindows:= A_ScreenWidth/2.5
+yWindows:= A_ScreenHeight/2.5
+
+Width :=1920
+Height := 1080
 
 
 
+
+IniRead, xCoord , Setting.ini,CoordZone,x
+IniRead, yCoord , Setting.ini,CoordZone,y
+IniRead, wCoord , Setting.ini,CoordZone,w
+IniRead, hCoord , Setting.ini,CoordZone,h
+IniRead, HotkeyMonture ,Setting.ini, Raccourcis , Monture
+IniRead, HotkeyAppats ,Setting.ini, Raccourcis , Appats
+IniRead, HotkeyCanne ,Setting.ini, Raccourcis , Canne
+
+x1F=%xCoord%
+y1F=%yCoord%
+x2F:=(xCoord + wCoord)
+y2F:=(yCoord + hCoord)
+
+
+gui,1:new
+Gui,1: -Caption +LastFound +hwndParent +AlwaysOntop
+Gui, 1:Add, Text, 0xE w500 h300 hwndhsplash
+SendMessage, 0x172, 0, hBitmap, , ahk_id %hsplash% ; STM_SETIMAGE = 0x172
 Gui, Font, s9 Bold, Comfortaa
-Gui,1:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
+
 Gui,1:Color,00FF00
 WinSet, Transcolor, 00FF00
 
-Main.Show_Window()
 
-Settimer,HB_Hover_Function,25
+
+HB_Button.Push(New Button_Type_69(x:=33,y:=55,w:=86,h:=22,Window:="1",Label:="MenuPeche",Text:="Peche",Font:="",Font_Size:="",Font_Color_Top:="",Font_Color_Bottom:="",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuVersion",Text:="Version",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
+HB_Button.Push(New Button_Type_Minimize(x:=310,y:=16,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_Exit(x:=330,y:=16,w:=15,h:=15,Window:="1",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
+Gui,1:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
+Gui,1:show,x%xWindows% y%yWindows% w357 h245,Connector
+Settimer,HB_Hover_Function,50
+gosub MenuVersion
+return
+
+
+
+
+
+MenuPeche:
+Gui,MenuVersion:Destroy
+Gui,MenuPecheAvance:Destroy
+If MenuPecheShow=1
+    return
+MenuVersionShow=0
+MenuPecheShow=1
+
+
+
+Gui, MenuPeche:new
+Gui,+hwndMenuPeche +ToolWindow -Caption +Parent1 +lastfound
+HB_Button.Push(New Button_Type_69(x:=37,y:=120,w:=125,h:=22,Window:="MenuPeche",Label:="MenuPecheAvance",Text:="Options Avancees",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y+=+35,w:=180,h:=22,Window:="MenuPeche",Label:="BotPeche",Text:="Start Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Switch[1] :=(New Flat_Round_Switch_Type_1(x:=2,y:=6,w:=2 h:=1,Text:="Vendre Item Gris",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
+HB_Switch[2] :=(New Flat_Round_Switch_Type_1(x:=2,y+=+20,w:=2 h:=1,Text:="Appats Automatique",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
+Gui, MenuPeche:Add, Text, x15  y148    w170   h1    0x4
+Gui,MenuPeche:Color,00FF00
+WinSet, Transcolor, 00FF00
+Gui,MenuPeche:show,x144 y47 h180 w200
+
+return
+
+
+MenuPecheAvance:
+Gui,MenuPeche:Destroy
+MenuPecheShow=0
+
+Gui, MenuPecheAvance:new
+Gui,+hwndMenuPecheAvance +ToolWindow -Caption +Parent1 +lastfound
+HB_Button.Push(New Button_Type_69(x:=10,y:=5,w:=80,h:=35,Window:="MenuPecheAvance",Label:="Zone",Text:="Délimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x+=+100,y:=5,w:=80,h:=35,Window:="MenuPecheAvance",Label:="DrawZone",Text:="Afficher Zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=57,y:=155,w:=90,h:=22,Window:="MenuPecheAvance",Label:="Save",Text:="Sauvegarder",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
+HB_Button.Push(New Message(x:=20,y:=47,w:=65,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Monture",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=120,y:=47,w:=65,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Appâts",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=45,y:=97,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Canne à Pêche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+Gui, Font, s9 bold, Comfortaa
+Gui, MenuPecheAvance:Add, Text, x15  y148    w170   h1    0x4
+Gui, MenuPecheAvance:Add, Text, x15  y45    w170   h1    0x4
+Gui,MenuPecheAvance:add,Button,x15  y45    w170   h1 hide
+Gui,MenuPecheAvance:add,hotkey,x30 y67 w46 h27 gHotkeyMonture vHotkeyMonture, %HotkeyMonture%
+Gui,MenuPecheAvance:add,hotkey,x130 y67 w46 h27 gHotkeyAppats vHotkeyAppats, %HotkeyAppats%
+Gui,MenuPecheAvance:add,hotkey,x78 y117 w46 h27 gHotkeyCanne vHotkeyCanne, %HotkeyCanne%
+Gui,MenuPecheAvance:Color,00FF00
+WinSet, Transcolor , 00FF00
+Gui,MenuPecheAvance:show,x144 y47 h180 w200
+return
+
+
+
+
+MenuVersion:
+Gui,MenuPecheAvance:Destroy
+Gui,MenuPeche:Destroy
+If MenuVersionShow=1
+    return
+MenuPecheShow=0
+MenuVersionShow=1
+Gui, MenuVersion:new
+Gui,+hwndMenuVersion +ToolWindow -Caption +Parent1 +lastfound
+HB_Button.Push(New Message(x:=0,y:=0,w:=200,h:=180,Window:="MenuVersion",Label:="",Text:="Patch Notes`n`n+ Ajout Menu Peche`n`n+ Ajout Menu Avancee`n`n+ Ajout Selecteur Zone`n`n+ Ajout Hotkey Mont/Peche/Appats`n`n+ Ajout Sauvegarde",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+Gui,MenuVersion:Color,00FF00
+WinSet, Transcolor, 00FF00
+Gui,MenuVersion:show,x144 y47 h180 w200
 return
 
 
@@ -39,55 +142,216 @@ return
 
 
 
-Find:
-prefix_list = playback:,capture:
-Loop, Parse, prefix_list, `,
+
+
+return
+HotkeyMonture:
+sleep 100
+send,{tab}
+return
+HotkeyAppats:
+sleep 100
+send,{tab}
+return
+HotkeyCanne:
+sleep 100
+send,{tab}
+return
+;HB_Switch[2]
+
+BotPeche:
+VerifWoW()
+if (WowAbs=1)
+    return
+WinMinimize, Connector
+PecheWow()
+return
+
+
+Save:
+VerifWoW()
+if (WowAbs=1)
+    return
+IniWrite, %xCoord% , Setting.ini,CoordZone,x
+IniWrite, %yCoord% , Setting.ini,CoordZone,y
+IniWrite, %wCoord% , Setting.ini,CoordZone,w
+IniWrite, %hCoord% , Setting.ini,CoordZone,h
+IniWrite, %HotkeyMonture% ,Setting.ini, Raccourcis , Monture
+IniWrite, %HotkeyAppats% ,Setting.ini, Raccourcis , Appats
+IniWrite, %HotkeyCanne% ,Setting.ini, Raccourcis , Canne
+
+goto MenuPeche
+return
+
+
+
+
+DrawZone:
+VerifWoW()
+if (WowAbs=1)
+    return
+OnOff := !OnOff
+If (OnOff=1)
 {
-    Loop {
-        if !(device := VA_GetDevice(A_Index))
-            break
-        device_list .= A_Index "=" VA_GetDeviceName(device) "`n"
+x1F=%xCoord%
+y1F=%yCoord%
+x2F:=(xCoord + wCoord)
+y2F:=(yCoord + hCoord)
+color := 0x4d000000
+Gui, Draw: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, Draw: Show, NA
+hwnd1 := WinExist()
+pToken := Gdip_Startup()
+hbm    := CreateDIBSection(Width, Height)
+hdc    := CreateCompatibleDC()
+obm    := SelectObject(hdc, hbm)
+G      := Gdip_GraphicsFromHDC(hdc)
+Gdip_SetSmoothingMode(G, 4)
+Brush := Gdip_BrushCreateSolid( "0xCCCA2535" )
+pPen   := Gdip_CreatePen(color, 10)
+	Gdip_FillRectangle( G , Brush , x1f-5 , y1f-10 , wCoord+10, 5 )    ;haut
 
-    }
+    Gdip_FillRectangle( G , Brush , x1f-10 , y1f-10 , 5, hcoord+20 )     ;gauche
+
+    Gdip_FillRectangle( G , Brush , x2f+5 , y1f-10 , 5, hcoord+20 )     ;droit
+
+    Gdip_FillRectangle( G , Brush , x1f-5 , y2f+5 , wCoord+10, 5 )   ;bas
+	Gdip_DeleteBrush( Brush )
+UpdateLayeredWindow(hwnd1, hdc, 0, 0, Width, Height)
+Gdip_DeletePen(pPen), Gdip_DeleteBrush(hBrush)
+SelectObject(hdc, obm), DeleteObject(hbm), DeleteDC(hdc), Gdip_DeleteGraphics(G)
+return
 }
-MsgBox % device_list
-return
-star:
+else
+    Gui,Draw:Destroy
 return
 
 
-uu:
-sleep 5000
-start:
-a=550
-b=200
+
+Zone:
+VerifWoW()
+if (WowAbs=1)
+    return
+Gui, Draw: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, Draw: Show, NA
+hwnd1 := WinExist()
+hbm := CreateDIBSection(Width, Height)
+hdc := CreateCompatibleDC()
+obm := SelectObject(hdc, hbm)
+G := Gdip_GraphicsFromHDC(hdc)
+Gdip_SetSmoothingMode(G, 4)
+pBrush := Gdip_BrushCreateSolid(0xaa000000)
+Gdip_FillRoundedRectangle(G, pBrush, 0, 0, Width, Height, 20)
+Gdip_DeleteBrush(pBrush)
+Options = x10p y20p w80p Centre cffffffff r4 s50 Underline Italic
+Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Délimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
+UpdateLayeredWindow(hwnd1, hdc, (A_ScreenWidth-Width)//2, (A_ScreenHeight-Height)//2, Width, Height)
+SelectObject(hdc, obm)
+DeleteObject(hbm)
+DeleteDC(hdc)
+Gdip_DeleteGraphics(G)
+WinActivate, World of Warcraft
+WinWait, World of Warcraft,, A
+KeyWait, Alt, D
+Gui, Draw:destroy
+MouseGetPos, X1,Y1
+Loop {
+MouseGetPos, X2,Y2
+xCoord := x1, yCoord := y1, wCoord := x2-x1, hCoord := y2-y1
+color := 0x4d000000
+
+Gui, Draw: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, Draw: Show, NA
+hwnd1 := WinExist() ; The created window's handle
+
+; Set up the bitmap
+pToken := Gdip_Startup()
+hbm    := CreateDIBSection(Width, Height)  ; The GDI bitmap
+hdc    := CreateCompatibleDC()                         ; Device context compatible with screen
+obm    := SelectObject(hdc, hbm)                       ; Select bitmap into device context
+G      := Gdip_GraphicsFromHDC(hdc)                    ; Get pointer to graphics of bitmap
+Gdip_SetSmoothingMode(G, 4)
+Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
+pPen   := Gdip_CreatePen(color, 10)
+hBrush := Gdip_BrushCreateSolid(color)
+Gdip_DrawRectangle(G, pPen,   xCoord, yCoord, wCoord, hCoord)
+Gdip_FillRectangle(G, hBrush, xCoord, yCoord, wCoord, hCoord)
+UpdateLayeredWindow(hwnd1, hdc, 0, 0, Width, Height)
+Gdip_DeletePen(pPen), Gdip_DeleteBrush(hBrush)
+SelectObject(hdc, obm), DeleteObject(hbm), DeleteDC(hdc), Gdip_DeleteGraphics(G)
+GetKeyState, state, LButton
+if (state = "D")
+{
+    Gui, Draw:destroy
+    WinActivate, Connector
+    break
+}
+}
+return
+
+
+Return:
+return
+
+
+WinMinimize:
+WinMinimize
+return
+Exit:
+Esc::
+Gdip_Shutdown(pToken)
+FileSetAttrib, -R, Main.ahk
+FileDelete, Main.ahk
+ExitApp
+
+VerifWow(){
+    global
+ IfWinNotExist, World of Warcraft
+{
+    MsgBox Veuillez lancer World of Warcraft
+    WowAbs=1
+}
+else
+{
+WowAbs=0
+WinActivate, World of Warcraft
+WinWait, World of Warcraft,, A
+}
+}
+PecheWow(){
+  global
+  afk=0
 send,{click}
 sleep 1000
-send, ²
-MouseMove,a,b
+send, %HotkeyCanne%
 sleep 50
 thiscursor1:=QueryMouseCursor()
 Loop{
 thiscursor:=QueryMouseCursor()
 if (thiscursor=thiscursor1)
 {
-a+=0.5
-	MouseMove,a,b
-	if (a>=1450)
-        {
-		b+=30
-		a=400
-        }
-    if (b>=750)
-        {
-		b=300
-        }
+x1F+=0.5
+	MouseMove,%x1F%,%y1F%
+	if (x1F>=x2F)
+	{
+		y1F+=30
+		x1F=%xCoord%
+	}
+	if (y1F>=y2F)
+	{
+		y1F=%yCoord%
+        afk++
+	}
+    if (afk=3)
+    {
+        gosub BotPeche
+    }
 }
 else
 	break
 }
-sleep 500
-audioMeter := VA_GetAudioMeter("playback:2")
+sleep 1000
+audioMeter := VA_GetAudioMeter("playback:5")
 VA_IAudioMeterInformation_GetMeteringChannelCount(audioMeter, 1)
 VA_GetDevicePeriod("capture", devicePeriod)
 Loop
@@ -107,140 +371,45 @@ Loop
 
    if (A_TimeIdle > 25000)
     {
-    goto start
+    gosub BotPeche
 }
 	if (meter>=0.20)
 	{
     sleep 1000
-    goto start
-}
-
-}
-
-return
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-QueryMouseCursor()
-{
-	NumPut(VarSetCapacity(CurrentCursorStruct, A_PtrSize + 16), CurrentCursorStruct, "uInt")
-	DllCall("GetCursorInfo", "ptr", &CurrentCursorStruct)
-	return (numP:=NumGet(CurrentCursorStruct,  8))
-}
-	MakeMeter(fraction, size)
-{
-    global MeterLength
-    Loop % fraction*size
-        meter .= "|"
-    Loop % (1-fraction)*size
-        meter .= "."
-    meter .= "  " fraction
-    return meter
-}
-
-
-
-InterfacePecheShow(){
-    global
-    loop, 1
-    {
-   GuiControl, show , % Peche[A_Index].hwnd
+    gosub BotPeche
 }
 }
 
-InterfacePecheHide(){
-    global
-    loop, 1
-    {
-    GuiControl, hide , % Peche[A_Index].hwnd
 }
+AppatsPoisson(){
+    Send %HotkeyAppats%
+    sleep 1000
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 MoveWin(){
 	PostMessage,0xA1,2
 }
-WinMinimize:
-WinMinimize
-return
-Exit:
-Esc::
-FileSetAttrib, -R, Main.ahk
-FileDelete, Main.ahk
-ExitApp
 
-
-
-
-
-
-
-
-
-
-
-Title_Bar_HUD(){
+SousMenu(){
 	;Bitmap Created Using: HB Bitmap Maker
 	pBitmap:=Gdip_CreateBitmap( 350 , 500 )
 	G := Gdip_GraphicsFromImage( pBitmap )
-	Gdip_SetSmoothingMode( G , 9 )
-	Brush := Gdip_BrushCreateSolid( "0xFF22040E" )
-	Gdip_FillRectangle( G , Brush , -10 , -10 , 230 , 39 )
-	Gdip_DeleteBrush( Brush )
-	;Login
-	Brush := Gdip_BrushCreateSolid( "0xFF333333" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 201 , 25 , 4 )
-	Gdip_DeleteBrush( Brush )
-	;Login
-	Brush := Gdip_BrushCreateHatch( "0x66000000" , "0x00000000" , 2 )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 201 , 25 , 4 )
-	Gdip_DeleteBrush( Brush )
-	;Login
-	Brush := Gdip_CreateLineBrushFromRect( 2 , 39 , 1 , 30 , "0xFF000000" , "0xFF333333" , 1 , 1 )
-	Gdip_FillRectangle( G , Brush , 0 , 10 , 201 , 15 )
-	Gdip_DeleteBrush( Brush )
-	;Login
-	Brush := Gdip_BrushCreateHatch( "0x66000000" , "0x00333333" , 2 )
-	Gdip_FillRectangle( G , Brush , 0 , 10 , 201 , 15 )
-	Gdip_DeleteBrush( Brush )
-	;Border login bot
+	Gdip_SetSmoothingMode( G , 4 )
+	;BG MENU
 	Brush := Gdip_BrushCreateSolid( "0xFF000000" )
-	Gdip_FillRectangle( G , Brush , 0 , 24 , 201 , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 203 , 186 , 5 )
 	Gdip_DeleteBrush( Brush )
-	;Login Launcher Title
-	Brush := Gdip_BrushCreateSolid( "0xFFF0F0F0" )
-	;Login Launcher Title
-	Gdip_TextToGraphics( G , "Peche Setting" , "s12  vCenter Bold c" Brush " x9 y3" , "Comfortaa" , 220 , 20 )
+	;BG MENU
+	Brush := Gdip_CreateLineBrush( 230 , 350 , 100 , 100 , "0xFF111111" , "0xFF222222" , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 201 , 184 , 4 )
+	Gdip_DeleteBrush( Brush )
+	;Background
+	Brush := Gdip_BrushCreateHatch( "0x4D000000" , "0x00000000" , 3 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 201 , 234 , 9 )
 	Gdip_DeleteBrush( Brush )
 	Gdip_DeleteGraphics( G )
 	return pBitmap
 }
-
-
 
 Back_Ground_HUD(){
 
@@ -316,57 +485,6 @@ Back_Ground_HUD(){
 	return pBitmap
 }
 
-Class Custom_Window	{
-	__New(x:="",y:="",w:=300,h:=200,Name:=1,Options:="+AlwaysOnTop -Caption -DPIScale",Title:="",Background_Bitmap:=""){
-		This.X:=x
-		This.Y:=y
-		This.W:=w
-		This.H:=h
-		This.Name:=Name
-		This.Title:=Title
-		This.Options:=Options
-		This.Background_Bitmap:=Background_Bitmap
-		This.Create_Window()
-	}
-	Create_Window(){
-		Gui,% This.Name ":New",%  This.Options " +LastFound "
-		This.Hwnd:=WinExist()
-		if(This.Background_Bitmap)
-			This.Draw_Background_Bitmap()
-	}
-	Draw_Background_Bitmap(){
-		This.Bitmap:=Gdip_CreateHBITMAPFromBitmap(This.Background_Bitmap)
-		Gdip_DisposeImage(This.Background_Bitmap)
-		Gui,% This.Name ":Add",Picture,% "x0 y0 w" This.W " h" This.H " 0xE"
-		GuiControlGet,hwnd,% This.Name ":hwnd",Static1
-		This.Background_Hwnd:=hwnd
-		SetImage(This.Background_Hwnd,This.Bitmap)
-	}
-	Show_Window(){
-		if(This.X&&This.Y)
-			Gui,% This.Name ":Show",% "x" This.X " y" This.Y " w" This.W " h" This.H,% This.Title
-		else if(This.X&&!This.Y)
-			Gui,% This.Name ":Show",% "x" This.X  " w" This.W " h" This.H,% This.Title
-		else if(!This.X&&This.Y)
-			Gui,% This.Name ":Show",% "y" This.Y  " w" This.W " h" This.H,% This.Title
-		else
-			Gui,% This.Name ":Show",% " w" This.W " h" This.H,% This.Title
-	}
-}
-
-HB_Hover_Function(){
-	static Hover_On, Index
-	MouseGetPos,,,,ctrl,2
-	if( ! Hover_On && ctrl){
-		loop,% HB_Button.Length()
-			if(ctrl=HB_Button[A_Index].Hwnd)
-				HB_Button[A_Index].Draw_Hover(),Hover_On:=1,Index:=A_Index,break
-	}else if(Hover_On)
-		if( ctrl != HB_Button[Index].Hwnd)
-			HB_Button[Index].Draw_Default(),Hover_On:=0
-}
-
-
 class Button_Type_69	{
 	__New(x:=10, y:=10, w:=90, h:=25, Window:="1", Label:="", Text:="Button", Font:="Arial", Font_Size:="10 Bold",Font_Color_Top:="000000",Font_Color_Bottom:="FFFFFF",Button_Background_Color:="F0F0F0",RoundNess:=2){
 		This.X:=x
@@ -402,23 +520,27 @@ class Button_Type_69	{
 	}
 	Create_Default_Bitmap(){
 
-	pBitmap:=Gdip_CreateBitmap( 88 , 23 )
+	pBitmap:=Gdip_CreateBitmap( This.W+1 , This.H+1 )
 	G := Gdip_GraphicsFromImage( pBitmap )
-	Gdip_SetSmoothingMode( G , 4 )
-	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 50 , "0xFF222222" , "0xFF222222" , 1 )
-	Gdip_FillRectangle( G , Brush , -2 , -3 , 120 , 60 )
+	Gdip_SetSmoothingMode( G , 5 )
+	;BG
+	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 100 , "0xFF222222" , "0xFF222222" , 1 )
+	Gdip_FillRectangle( G , Brush , -2 , -3 , 200 , 60 )
 	Gdip_DeleteBrush( Brush )
-	Brush := Gdip_BrushCreateSolid( "0xFFAC1B34" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
+	;border
+	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , This.H , 4 )
 	Gdip_DeleteBrush( Brush )
+	;fond button
 	Brush := Gdip_BrushCreateSolid( "0xFF2A2A2A" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 5 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , This.H , 5 )
 	Gdip_DeleteBrush( Brush )
+	;texture
 	Brush := Gdip_CreateLineBrush( 0 , 30 , 0 , 3 , "0xFF000000" , "0x1AFFFFFF" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 86 , 4 , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , 4 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
-	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
+	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x y" , "Comfortaa" , This.W , This.H+4 )
 	Gdip_DeleteBrush( Brush )
 	Gdip_DeleteGraphics( G )
 
@@ -427,26 +549,26 @@ class Button_Type_69	{
 	}
 	Create_Hover_Bitmap(){
 
-	pBitmap:=Gdip_CreateBitmap( 88 , 23 )
+	pBitmap:=Gdip_CreateBitmap( This.W+1 , This.H+1 )
 	G := Gdip_GraphicsFromImage( pBitmap )
 	Gdip_SetSmoothingMode( G , 4 )
 	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 100 , "0xFF222222" , "0xFF222222" , 1 )
-	Gdip_FillRectangle( G , Brush , -10 , -10 , 150 , 80 )
+	Gdip_FillRectangle( G , Brush , -10 , -10 , 200 , 80 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFAC1B34" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , This.H , 4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFF333333" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 5 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , This.H , 5 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 30 , 0 , 3 , "0xFF000000" , "0x1AFFFFFF" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 86 , 4 , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W-1 , 4 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0x1A0078D7" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , This.H , 4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
-	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
+	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x y" , "Comfortaa" , This.W , This.H+4 )
 	Gdip_DeleteBrush( Brush )
 	Gdip_DeleteGraphics( G )
 
@@ -456,35 +578,35 @@ class Button_Type_69	{
 	}
 	Create_Pressed_Bitmap(){
 
-	pBitmap:=Gdip_CreateBitmap( 88 , 23 )
+	pBitmap:=Gdip_CreateBitmap( This.W+1 , This.H+1 )
 	G := Gdip_GraphicsFromImage( pBitmap )
 	Gdip_SetSmoothingMode( G , 4 )
 	Brush := Gdip_CreateLineBrush( 0 , 0 , 0 , 50 , "0xFF222222" , "0xFF222222" , 1 )
-	Gdip_FillRectangle( G , Brush , -10 , -12 , 110 , 70 )
+	Gdip_FillRectangle( G , Brush , -10 , -12 , 200 , 70 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFAC1B34" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 4 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , This.H , 4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFF333333" )
-	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 87 , 22 , 5 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , This.W , This.H , 5 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 400 , 0 , 80 , "0xFF000000" , "0x33000000" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 1 , 0 , 87 , 22 , 5 )
+	Gdip_FillRoundedRectangle( G , Brush , 1 , 0 , This.W , This.H , 5 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 30 , 0 , 3 , "0x66000000" , "0x66000000" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 2 , 0 , 83 , 3 , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 2 , 0 , This.W-5 , 3 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 30 , 0 , 3 , "0x66000000" , "0x66000000" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 2 , 19 , 83 , 2 , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 2 , This.H-4 , This.W-5 , 2 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
-	Gdip_TextToGraphics( G , This.Text , "s12 Center vCenter Bold c" Brush " x-1 y-12" , "Comfortaa" , 90 , 50 )
+	Gdip_TextToGraphics( G , This.Text , "s11 Center vCenter Bold c" Brush " x y" , "Comfortaa" , This.W , This.H+4 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 30 , 0 , 3 , "0x66000000" , "0x66000000" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 1 , 2 , 2 , 17 , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , 1 , 2 , 2 , This.H-6 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Brush := Gdip_CreateLineBrush( 0 , 30 , 0 , 3 , "0x66000000" , "0x66000000" , 1 )
-	Gdip_FillRoundedRectangle( G , Brush , 84 , 2 , 2 , 18 , 1 )
+	Gdip_FillRoundedRectangle( G , Brush , This.W-3 , 2 , 2 , This.H-6 , 1 )
 	Gdip_DeleteBrush( Brush )
 	Gdip_DeleteGraphics( G )
 
@@ -783,13 +905,211 @@ class Button_Type_Exit	{
 	}
 }
 
+class Message	{
+	__New(x:=10, y:=10, w:=90, h:=25, Window:="1", Label:="", Text:="Button", Font:="Arial", Font_Size:="10 Bold",Font_Color_Top:="000000",Font_Color_Bottom:="FFFFFF",Button_Background_Color:="F0F0F0",RoundNess:=2){
+		This.X:=x
+		This.Y:=y
+		This.W:=w
+		This.H:=h
+		This.Window:=Window
+		This.Label:=Label
+		This.Text:=Text
+		This.Font:=Font
+		This.Font_Size:=Font_Size
+		This.Font_Color_Top:= "0xFF" Font_Color_Top
+		This.Font_Color_Bottom:= "0xFF" Font_Color_Bottom
+		This.Button_Background_Color:="0xFF" Button_Background_Color
+		This.Roundness:=Roundness
+
+		This.Create_Trigger()
+		This.Create_Default_Bitmap()
+		This.Create_Hover_Bitmap()
+		This.Create_Pressed_Bitmap()
+		sleep,20
+		This.Draw_Default()
+
+	}
+	Create_Trigger(){
+		Gui,% This.Window ": Add",Picture,% "x" This.X " y" This.Y " w" This.W " h" This.H " hwndhwnd 0xE"
+		This.Hwnd:=hwnd
+		BPC:=This.Draw_Pressed.Bind(This)
+		GuiControl,+G,% This.Hwnd,% BPC
+		if(This.Label){
+			(IsFunc(This.Label))?(This.Function:=Func(This.Label),This.Type:="Function"):(This.Type:="Label")
+		}
+	}
+	Create_Default_Bitmap(){
 
 
+	pBitmap:=Gdip_CreateBitmap( This.W+1 , This.H+1 )
+	G := Gdip_GraphicsFromImage( pBitmap )
+	Gdip_SetSmoothingMode( G , 4 )
+	Brush := Gdip_CreateLineBrush( 0 , 400 , 0 , 80 , "0xFF1E1E1E" , "0xFF1E1E1E" , 2 )
+	Gdip_FillRectangle( G , Brush , -1 , -1 , This.W+2 , This.H+2  )
+ 	Brush := Gdip_BrushCreateHatch( "0x4D000000" , "0x00000000" , 3 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 341 , 234 , 9 )
+	Gdip_DeleteBrush( Brush )
+	Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
+	Gdip_TextToGraphics( G , This.Text , "s" This.Font_Size " Center vCenter Bold c" Brush " x y" , "Comfortaa" , This.W , This.H+4)
+	Gdip_DeleteBrush( Brush )
+	Gdip_DeleteGraphics( G )
 
 
+		This.Default_Bitmap:=Gdip_CreateHBITMAPFromBitmap(pBitmap)
+		Gdip_DisposeImage(pBitmap)
+	}
+	Draw_Default(){
+		SetImage(This.hwnd, This.Default_Bitmap)
+	}
+}
+
+class Flat_Round_Switch_Type_1	{
+	__New(x,y,w:=19,Text:="Text",Font:="Arial",FontSize:= "10 Bold" , FontColor:="FFFFFF" ,Window:="1",Background_Color:="0x000000",State:=0){
+		This.State:=State
+		This.X:=x
+		This.Y:=y
+		This.W:=270
+		This.H:=16
+		This.Text:=Text
+		This.Font:=Font
+		This.FontSize:=FontSize
+		This.FontColor:= "0xFF" FontColor
+		This.Background_Color:=Background_Color
+		This.Window:=Window
+		This.Create_Off_Bitmap()
+		This.Create_On_Bitmap()
+		This.Create_Trigger()
+		sleep,20
+		if(This.State)
+			This.Draw_On()
+		else
+			This.Draw_Off()
+	}
+	Create_Trigger(){
+		Gui , % This.Window ": Add" , Picture , % "x" This.X " y" This.Y " w" This.W " h" This.H " 0xE hwndhwnd"
+		This.Hwnd:=hwnd
+		BD := THIS.Switch_State.BIND( THIS )
+		GUICONTROL +G , % This.Hwnd , % BD
+	}
+	Create_Off_Bitmap(){
+		;Bitmap Created Using: HB Bitmap Maker
+		pBitmap:=Gdip_CreateBitmap( This.W , This.H )
+		 G := Gdip_GraphicsFromImage( pBitmap )
+		Gdip_SetSmoothingMode( G , 2 )
+		Brush := Gdip_BrushCreateSolid( "0xFF1E1E1E" )
+		Gdip_FillRectangle( G , Brush , -1 , -1 , This.W+2 , 23 )
+		Gdip_DeleteBrush( Brush )
+ 	Brush := Gdip_BrushCreateHatch( "0x4D000000" , "0x00000000" , 3 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 341 , 234 , 9 )
+	Gdip_DeleteBrush( Brush )
+
+		Brush := Gdip_BrushCreateSolid( "0xFF262827" )
+		Gdip_FillRoundedRectangle( G , Brush , 1 , 2 , 26 , 13 , 5 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_BrushCreateSolid( "0xFF303334" )
+		Gdip_FillRoundedRectangle( G , Brush , 2 , 3 , 24 , 11 , 5 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_BrushCreateSolid( "0x8827282B" )
+		Gdip_FillEllipse( G , Brush , 0 , 0 , 18 , 18 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_BrushCreateSolid( "0xFF1A1C1F" )
+		Gdip_FillEllipse( G , Brush , 0 , 0 , 17 , 17 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_CreateLineBrushFromRect( 3 , 2 , 11 , 14 , "0xFF60646A" , "0xFF393B3F" , 1 , 1 )
+		Gdip_FillEllipse( G , Brush , 1 , 1 , 15 , 15 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_BrushCreateSolid( This.FontColor )
+		Gdip_TextToGraphics( G , This.Text , "s" This.FontSize " vCenter c" Brush " x33 y2" , This.Font , This.W-33, This.H )
+		Gdip_DeleteBrush( Brush )
+
+		This.Off_Bitmap := Gdip_CreateHBITMAPFromBitmap(pBitmap)
+		Gdip_DisposeImage(pBitmap)
+	}
+	Create_On_Bitmap(){
+		;Bitmap Created Using: HB Bitmap Maker
+		pBitmap:=Gdip_CreateBitmap( This.W , This.H )
+		 G := Gdip_GraphicsFromImage( pBitmap )
+		Gdip_SetSmoothingMode( G , 2 )
+		Brush := Gdip_BrushCreateSolid( "0xFF1E1E1E" )
+		Gdip_FillRectangle( G , Brush , -1 , -1 , This.W+2 , 23 )
+		Gdip_DeleteBrush( Brush )
+
+		Pen := Gdip_CreatePen( "0xFF1B1D1E" , 1 )
+		Gdip_DrawRoundedRectangle( G , Pen , 1 , 2 , 26 , 13 , 5 )
+		Gdip_DeletePen( Pen )
+		;~ Brush := Gdip_BrushCreateSolid( "0xFF1C538A" )
+ 	Brush := Gdip_BrushCreateHatch( "0x4D000000" , "0x00000000" , 3 )
+	Gdip_FillRoundedRectangle( G , Brush , 0 , 0 , 341 , 234 , 9 )
+		Gdip_DeleteBrush( Brush )
+		;~ Brush := Gdip_BrushCreateSolid( "0xFF2672B3" )
+		Brush := Gdip_BrushCreateSolid( "0xFF661633" )
+		;~ Brush := Gdip_BrushCreateSolid( "0xFFA866E2" )
+		Gdip_FillRoundedRectangle( G , Brush , 2 , 3 , 23 , 11 , 4 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_BrushCreateSolid( "0x8827282B" )
+		Gdip_FillEllipse( G , Brush , 11 , 0 , 18 , 18 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_BrushCreateSolid( "0xFF1A1C1F" )
+		Gdip_FillEllipse( G , Brush , 11 , 0 , 17 , 17 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_CreateLineBrushFromRect( 3 , 2 , 11 , 14 , "0xFF60646A" , "0xFF393B3F" , 1 , 1 )
+		Gdip_FillEllipse( G , Brush , 12 , 1 , 15 , 15 )
+		Gdip_DeleteBrush( Brush )
+		Brush := Gdip_CreateLineBrushFromRect( 5 , 3 , 10 , 12 , "0xFF4D5055" , "0xFF36383B" , 1 , 1 )
+		Gdip_FillEllipse( G , Brush , 13 , 2 , 13 , 13 )
+		Gdip_DeleteBrush( Brush )
+        Brush := Gdip_BrushCreateSolid( This.FontColor )
+		Gdip_TextToGraphics( G , This.Text , "s" This.FontSize " vCenter c" Brush " x33 y2" , This.Font , This.W-33, This.H )
+		Gdip_DeleteBrush( Brush )
+		This.On_Bitmap := Gdip_CreateHBITMAPFromBitmap(pBitmap)
+		Gdip_DisposeImage(pBitmap)
+	}
+	Switch_State(){
+		(This.State:=!This.State)?(This.Draw_On()):(This.Draw_Off())
+		;~ This.State:=!This.State
+		;~ If(This.State)
+			;~ This.Draw_On()
+		;~ else
+			;~ This.Draw_Off()
+	}
+	Draw_Off(){
+		SetImage( This.Hwnd , This.Off_Bitmap )
+	}
+	Draw_On(){
+		SetImage( This.Hwnd , This.On_Bitmap )
+	}
+}
 
 
+HB_Hover_Function(){
+	static Hover_On, Index
+	MouseGetPos,,,,ctrl,2
+	if( ! Hover_On && ctrl){
+		loop,% HB_Button.Length()
+			if(ctrl=HB_Button[A_Index].Hwnd)
+				HB_Button[A_Index].Draw_Hover(),Hover_On:=1,Index:=A_Index,break
+	}else if(Hover_On)
+		if( ctrl != HB_Button[Index].Hwnd)
+			HB_Button[Index].Draw_Default(),Hover_On:=0
+}
 
+
+QueryMouseCursor()
+{
+	NumPut(VarSetCapacity(CurrentCursorStruct, A_PtrSize + 16), CurrentCursorStruct, "uInt")
+	DllCall("GetCursorInfo", "ptr", &CurrentCursorStruct)
+	return (numP:=NumGet(CurrentCursorStruct,  8))
+}
+	MakeMeter(fraction, size)
+{
+    global MeterLength
+    Loop % fraction*size
+        meter .= "|"
+    Loop % (1-fraction)*size
+        meter .= "."
+    meter .= "  " fraction
+    return meter
+}
 
 
 
@@ -945,6 +1265,105 @@ VA_WStrOut(ByRef str) {
     DllCall("ole32\CoTaskMemFree", "ptr", ptr)  ; FREES THE STRING.
 }
 
+
+
+
+
+
+
+
+;#####################################################################################
+;GDIP HELPER
+;#####################################################################################
+
+
+JustTheBasics() {
+	global
+
+	; Start gdi+
+	If !pToken := Gdip_Startup()
+	{
+		MsgBox, 48, gdiplus error!, Gdiplus failed to start. Please ensure you have gdiplus on your system
+		ExitApp
+	}
+	OnExit, Exite
+	return
+
+
+	Exite:
+	; gdi+ may now be shutdown on exiting the program
+	Gdip_Shutdown(pToken)
+	ExitApp
+	Return
+
+}
+
+SetUpGDIP(iWidth=-1, iHeight=-1) {
+	global
+	Width := iWidth
+	Height := iHeight
+	If (iWidth < 0) {
+		Width := A_ScreenWidth
+	}
+	if (iHeight < 0) {
+		height := A_ScreenHeight
+	}
+
+
+	JustTheBasics()
+
+	; Create a layered window (+E0x80000 : must be used for UpdateLayeredWindow to work!) that is always on top (+AlwaysOnTop), has no taskbar entry or caption
+	Gui, 1: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+
+	; Show the window
+	Gui, 1: Show, NA
+
+	; Get a handle to this window we have created in order to update it later
+    hwnd1 := WinExist()
+	return
+}
+
+StartDrawGDIP() {
+	global
+
+	; Create a gdi bitmap with width and height of what we are going to draw into it. This is the entire drawing area for everything
+	hbm := CreateDIBSection(Width, Height)
+
+	; Get a device context compatible with the screen
+	hdc := CreateCompatibleDC()
+
+	; Select the bitmap into the device context
+	obm := SelectObject(hdc, hbm)
+
+	; Get a pointer to the graphics of the bitmap, for use with drawing functions
+	G := Gdip_GraphicsFromHDC(hdc)
+}
+
+EndDrawGDIP() {
+	global
+
+	; Update the specified window we have created (hwnd1) with a handle to our bitmap (hdc), specifying the x,y,w,h we want it positioned on our screen
+	; So this will position our gui at (0,0) with the Width and Height specified earlier
+	UpdateLayeredWindow(hwnd1, hdc, 0, 0, Width, Height)
+
+
+	; Select the object back into the hdc
+	SelectObject(hdc, obm)
+
+	; Now the bitmap may be deleted
+	DeleteObject(hbm)
+
+	; Also the device context related to the bitmap may be deleted
+	DeleteDC(hdc)
+
+	; The graphics may now be deleted
+	Gdip_DeleteGraphics(G)
+}
+
+ClearDrawGDIP() {
+	global
+	Gdip_GraphicsClear(G)
+}
 ; Gdip standard library v1.45 by tic (Tariq Porter) 07/09/11
 ; Modifed by Rseding91 using fincs 64 bit compatible Gdip library 5/1/2013
 ; Supports: Basic, _L ANSi, _L Unicode x86 and _L Unicode x64
