@@ -7,12 +7,11 @@ CoordMode, window
 pToken:=Gdip_Startup()
 global HB_Button:=[]
 global HB_Switch:=[]
-;#Include Untitled.ahk
+#Include Untitled.ahk
 global OnOff=0
 
 HotkeySTOP=Escape
 
-Tooltip, NewUpdate , x500 y0
 
 While (dev := VA_GetDevice("playback:" A_Index))
 {
@@ -34,7 +33,7 @@ return
 */
 
 
-
+tooltip, a neww update , x0 y500
 
 
 /*
@@ -684,11 +683,11 @@ x1F+=0.5
 	if (x1F>=x2F)
 	{
 		y1F+=30
-		x1F=%xCoord%
+		x1F=%xCoordPeche%
 	}
 	if (y1F>=y2F)
 	{
-		y1F=%yCoord%
+		y1F=%yCoordPeche%
         afk++
 	}
     if (afk=3)
