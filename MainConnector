@@ -111,10 +111,10 @@ If (HotkeyStop="")
 HotkeySTOP=Escape
 Hotkey,%HotkeyStop%,OnOff
 }
-If (HotkeySTOP=HotkeySTOP)
-{
-    Hotkey,~%HotkeyStop%,OnOff
-}
+;If (HotkeySTOP=HotkeySTOP)
+;{
+;    Hotkey,~%HotkeyStop%,OnOff
+;}
 
 
 
