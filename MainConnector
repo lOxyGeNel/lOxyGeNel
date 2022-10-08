@@ -7,11 +7,12 @@ CoordMode, window
 pToken:=Gdip_Startup()
 global HB_Button:=[]
 global HB_Switch:=[]
-
+;#Include Untitled.ahk
 global OnOff=0
 
 HotkeySTOP=Escape
 
+Tooltip, Update , x0 y0
 
 While (dev := VA_GetDevice("playback:" A_Index))
 {
@@ -66,7 +67,7 @@ return
 
 
 
-tooltip, update
+
 
 
 I_Icon = Connect.ico
@@ -111,10 +112,7 @@ If (HotkeyStop="")
 HotkeySTOP=Escape
 Hotkey,%HotkeyStop%,OnOff
 }
-;If (HotkeySTOP=HotkeySTOP)
-;{
-;    Hotkey,~%HotkeyStop%,OnOff
-;}
+
 
 
 
@@ -345,10 +343,10 @@ VerifWoW()
 if (WowAbs=1)
     return
 WinMinimize, Connector
-x1F=%xCoord%
-y1F=%yCoord%
-x2F:=(xCoord + wCoord)
-y2F:=(yCoord + hCoord)
+x1F=%xCoordPeche%
+y1F=%yCoordPeche%
+x2F:=(xCoordPeche + wCoordPeche)
+y2F:=(yCoordPeche + hCoordPeche)
 
 PecheWow()
 return
