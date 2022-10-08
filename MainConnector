@@ -325,7 +325,7 @@ PecheWow(){
 send,{click}
 sleep 1000
 send, %HotkeyCanne%
-sleep 50
+sleep 500
 thiscursor1:=QueryMouseCursor()
 Loop{
 thiscursor:=QueryMouseCursor()
