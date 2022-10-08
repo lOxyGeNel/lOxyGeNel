@@ -127,7 +127,7 @@ MenuPecheShow=0
 MenuVersionShow=1
 Gui, MenuVersion:new
 Gui,+hwndMenuVersion +ToolWindow -Caption +Parent1 +lastfound
-HB_Button.Push(New Message(x:=0,y:=0,w:=200,h:=180,Window:="MenuVersion",Label:="",Text:="Patch Notes`n`n+ Ajout Menu Peche`n`n+ Ajout Menu Avancee`n`n+ Ajout Selecteur Zone`n`n+ Ajout Hotkey Mont/Peche/Appats`n`n+",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=0,y:=0,w:=200,h:=180,Window:="MenuVersion",Label:="",Text:="Patch Notes`n`n+ `n`n+ Ajout Menu Avancee`n`n+ Ajout Selecteur Zone`n`n+ Ajout Hotkey Mont/Peche/Appats`n`n+",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 Gui,MenuVersion:Color,00FF00
 WinSet, Transcolor, 00FF00
 Gui,MenuVersion:show,x144 y47 h180 w200
