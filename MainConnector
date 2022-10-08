@@ -7,7 +7,7 @@ CoordMode, window
 pToken:=Gdip_Startup()
 global HB_Button:=[]
 global HB_Switch:=[]
-#Include Untitled.ahk
+;#Include Untitled.ahk
 global OnOff=0
 
 HotkeySTOP=Escape
