@@ -12,7 +12,7 @@ global OnOff=0
 
 HotkeySTOP=Escape
 
-Tooltip, Update , x500 y0
+Tooltip, NewUpdate , x500 y0
 
 While (dev := VA_GetDevice("playback:" A_Index))
 {
