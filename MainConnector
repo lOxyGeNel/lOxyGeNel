@@ -374,10 +374,12 @@ Loop
 
    if (A_TimeIdle > 25000)
     {
+    tooltip
     gosub BotPeche
 }
 	if (meter>=0.20)
 	{
+	tooltip
     sleep 1000
     gosub BotPeche
 }
