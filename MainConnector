@@ -27,7 +27,7 @@ Width :=1920
 Height := 1080
 
 
-
+msgbox oui
 
 IniRead, xCoord , Setting.ini,CoordZone,x
 IniRead, yCoord , Setting.ini,CoordZone,y
