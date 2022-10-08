@@ -58,6 +58,7 @@ HB_Button.Push(New Button_Type_Exit(x:=330,y:=16,w:=15,h:=15,Window:="1",Label:=
 
 Gui,1:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
 Gui,1:show,x%xWindows% y%yWindows% w357 h245,Connector
+msgbox oui
 Settimer,HB_Hover_Function,50
 gosub MenuVersion
 return
@@ -328,6 +329,7 @@ send,{click}
 sleep 1000
 send, %HotkeyCanne%
 MouseMove, %RESETx%, %RESETy%
+sleep 5000
 thiscursor1:=QueryMouseCursor()
 Loop{
 thiscursor:=QueryMouseCursor()
