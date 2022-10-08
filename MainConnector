@@ -2,13 +2,71 @@
 SetBatchLines -1
 SendMode Input
 CoordMode, window
+#MaxThreadsPerHotkey 3
 
 pToken:=Gdip_Startup()
 global HB_Button:=[]
 global HB_Switch:=[]
+#Include Untitled.ahk
+global OnOff=0
 
-global SS_BLACKRECT   := 0x4       ; displays a frame around the control and fills the control with a solid color that is the same color as the Window Frame (COLOR_WINDOWFRAME).
-global SS_GRAYRECT    := 0x5
+HotkeySTOP=Escape
+
+
+While (dev := VA_GetDevice("playback:" A_Index))
+{
+    devlist .= A_Index ": " VA_GetDeviceName(dev) "|"
+}
+
+/*
+Gui, tes:Add, DropDownList, gtest vPets , %devlist%
+teu=10: Casque (RØDE NT-USB Mini)
+
+GuiControl, tes:ChooseString, Pets, %teu%
+gui, tes:show
+return
+test:
+Gui, Submit, NoHide
+MsgBox %Pets%
+return
+
+*/
+
+
+
+
+
+/*
+l::
+audioMeter := VA_GetAudioMeter(9)
+VA_IAudioMeterInformation_GetMeteringChannelCount(audioMeter, 1)
+VA_GetDevicePeriod("capture", devicePeriod)
+Loop
+{
+    ; Get the peak value across all channels.
+    VA_IAudioMeterInformation_GetPeakValue(audioMeter, peakValue)
+    meter := MakeMeter(peakValue, MeterLength)
+
+    ; Get the peak values of all channels.
+    VarSetCapacity(peakValues, channelCount*4)
+    VA_IAudioMeterInformation_GetChannelsPeakValues(audioMeter, 1, &peakValues)
+    Loop %channelCount%
+        meter.= "" MakeMeter(NumGet(peakValues, A_Index*4-4, "float"), MeterLength)
+
+    ToolTip, %meter% %StartTime% ,0,0
+    Sleep, %devicePeriod%
+}
+return
+*/
+
+
+
+
+
+
+
+
+
 
 
 I_Icon = Connect.ico
@@ -20,36 +78,63 @@ FileDelete, Main.ahk
 hBitmap := Gdip_CreateHBITMAPFromBitmap(Back_Ground_HUD())
 
 
-xWindows:= A_ScreenWidth/2.5
-yWindows:= A_ScreenHeight/2.5
+xWin:= A_ScreenWidth/2.5
+yWin:= A_ScreenHeight/2.5
+xWindows:=(xWin-10)
+yWindows:=(yWin-6)
+Width :=A_ScreenWidth
+Height := A_ScreenHeight
 
-Width :=1920
-Height := 1080
 
 
 
-IniRead, xCoord , Setting.ini,CoordZone,x
-IniRead, yCoord , Setting.ini,CoordZone,y
-IniRead, wCoord , Setting.ini,CoordZone,w
-IniRead, hCoord , Setting.ini,CoordZone,h
+IniRead, xCoordPeche , Setting.ini,CoordZone,xCoordPeche
+IniRead, yCoordPeche , Setting.ini,CoordZone,yCoordPeche
+IniRead, wCoordPeche , Setting.ini,CoordZone,wCoordPeche
+IniRead, hCoordPeche , Setting.ini,CoordZone,hCoordPeche
+IniRead, xCoordVente , Setting.ini,CoordZone,xCoordVente
+IniRead, yCoordVente , Setting.ini,CoordZone,yCoordVente
+IniRead, wCoordVente , Setting.ini,CoordZone,wCoordVente
+IniRead, hCoordVente , Setting.ini,CoordZone,hCoordVente
 IniRead, HotkeyMonture ,Setting.ini, Raccourcis , Monture
 IniRead, HotkeyAppats ,Setting.ini, Raccourcis , Appats
 IniRead, HotkeyCanne ,Setting.ini, Raccourcis , Canne
+IniRead, HotkeySTOP ,Setting.ini, Raccourcis , Stop
+IniRead, audioSource1 ,Setting.ini, Audio , AudioSource
+IniRead, SelectAudio ,Setting.ini, Audio , SelectAudio
 
 
 
+
+If (HotkeyStop="")
+{
+HotkeySTOP=Escape
+Hotkey,%HotkeyStop%,OnOff
+}
+If (HotkeySTOP=HotkeySTOP)
+{
+    Hotkey,~%HotkeyStop%,OnOff
+}
+
+
+
+
+
+;#####################################################################################
+;                               MAIN MENU
+;#####################################################################################
 gui,1:new
 Gui,1: -Caption +LastFound +hwndParent +AlwaysOntop
 Gui, 1:Add, Text, 0xE w500 h300 hwndhsplash
-SendMessage, 0x172, 0, hBitmap, , ahk_id %hsplash% ; STM_SETIMAGE = 0x172
+SendMessage, 0x172, 0, hBitmap,, ahk_id %hsplash% ; STM_SETIMAGE = 0x172
 Gui, Font, s9 Bold, Comfortaa
-
 Gui,1:Color,00FF00
 WinSet, Transcolor, 00FF00
 
 
 
 HB_Button.Push(New Button_Type_69(x:=33,y:=55,w:=86,h:=22,Window:="1",Label:="MenuPeche",Text:="Peche",Font:="",Font_Size:="",Font_Color_Top:="",Font_Color_Bottom:="",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuParametre",Text:="Parametre",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuVersion",Text:="Version",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 HB_Button.Push(New Button_Type_Minimize(x:=310,y:=16,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -57,77 +142,169 @@ HB_Button.Push(New Button_Type_Exit(x:=330,y:=16,w:=15,h:=15,Window:="1",Label:=
 
 Gui,1:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
 Gui,1:show,x%xWindows% y%yWindows% w357 h245,Connector
-
-Settimer,HB_Hover_Function,50
+Settimer,HB_Hover_Function,25
 gosub MenuVersion
 return
 
 
+;#####################################################################################
+;                               MENU PECHE
+;#####################################################################################
 
 
 
 MenuPeche:
-Gui,MenuVersion:Destroy
-Gui,MenuPecheAvance:Destroy
 If MenuPecheShow=1
     return
-MenuVersionShow=0
+ResetMenu()
+If MenuPecheShow=0
+    DeleteGui()
 MenuPecheShow=1
-
-
 
 Gui, MenuPeche:new
 Gui,+hwndMenuPeche +ToolWindow -Caption +Parent1 +lastfound
 HB_Button.Push(New Button_Type_69(x:=37,y:=120,w:=125,h:=22,Window:="MenuPeche",Label:="MenuPecheAvance",Text:="Options Avancees",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
+
 HB_Button.Push(New Button_Type_69(x:=10,y+=+35,w:=180,h:=22,Window:="MenuPeche",Label:="BotPeche",Text:="Start Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y:=155,w:=180,h:=22,Window:="MenuPeche",Label:="BotPeche",Text:="Stop Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
+
 HB_Switch[1] :=(New Flat_Round_Switch_Type_1(x:=2,y:=6,w:=2 h:=1,Text:="Vendre Item Gris",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
 HB_Switch[2] :=(New Flat_Round_Switch_Type_1(x:=2,y+=+20,w:=2 h:=1,Text:="Appats Automatique",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
 Gui, MenuPeche:Add, Text, x15  y148    w170   h1    0x4
 Gui,MenuPeche:Color,00FF00
 WinSet, Transcolor, 00FF00
 Gui,MenuPeche:show,x144 y47 h180 w200
-
+OnOffVerif()
 return
+
+
+OnOff:
+if onoff=1
+{
+OnOff()
+OnOffverif()
+}
+return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;#####################################################################################
+;                               MENU PECHE AVANCEE
+;#####################################################################################
 
 
 MenuPecheAvance:
-Gui,MenuPeche:Destroy
-MenuPecheShow=0
+If MenuPecheAvanceShow=1
+    return
+ResetMenu()
+If MenuPecheAvanceShow=0
+    DeleteGui()
+MenuPecheAvanceShow=1
 
 Gui, MenuPecheAvance:new
 Gui,+hwndMenuPecheAvance +ToolWindow -Caption +Parent1 +lastfound
-HB_Button.Push(New Button_Type_69(x:=10,y:=5,w:=80,h:=35,Window:="MenuPecheAvance",Label:="Zone",Text:="Delimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x+=+100,y:=5,w:=80,h:=35,Window:="MenuPecheAvance",Label:="DrawZone",Text:="Afficher Zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=45,y:=0,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Zone De Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=45,y:=65,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Zone De Vente",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y:=20,w:=80,h:=35,Window:="MenuPecheAvance",Label:="ZonePeche",Text:="Délimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x+=+100,y:=20,w:=80,h:=35,Window:="MenuPecheAvance",Label:="DrawZonePeche",Text:="Afficher Zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
+HB_Button.Push(New Button_Type_69(x:=10,y:=85,w:=80,h:=35,Window:="MenuPecheAvance",Label:="ZoneVente",Text:="Délimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x+=+100,y:=85,w:=80,h:=35,Window:="MenuPecheAvance",Label:="DrawZoneVente",Text:="Afficher Zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
 HB_Button.Push(New Button_Type_69(x:=57,y:=155,w:=90,h:=22,Window:="MenuPecheAvance",Label:="Save",Text:="Sauvegarder",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
-HB_Button.Push(New Message(x:=20,y:=47,w:=65,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Monture",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Message(x:=120,y:=47,w:=65,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Appats",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Message(x:=45,y:=97,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Canne à Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-Gui, Font, s9 bold, Comfortaa
+
+Gui, Font, s8 bold, Comfortaa
 Gui, MenuPecheAvance:Add, Text, x15  y148    w170   h1    0x4
-Gui, MenuPecheAvance:Add, Text, x15  y45    w170   h1    0x4
-Gui,MenuPecheAvance:add,Button,x15  y45    w170   h1 hide
-Gui,MenuPecheAvance:add,hotkey,x30 y67 w46 h27 gHotkeyMonture vHotkeyMonture, %HotkeyMonture%
-Gui,MenuPecheAvance:add,hotkey,x130 y67 w46 h27 gHotkeyAppats vHotkeyAppats, %HotkeyAppats%
-Gui,MenuPecheAvance:add,hotkey,x78 y117 w46 h27 gHotkeyCanne vHotkeyCanne, %HotkeyCanne%
-Gui,MenuPecheAvance:Color,00FF00
+Gui, MenuPecheAvance:Add, Text, x15  y60   w170   h1    0x4
+Gui, MenuPecheAvance:add,Button,x15  y45    w170   h1 hide
+
+Gui, MenuPecheAvance:Color,00FF00
 WinSet, Transcolor , 00FF00
 Gui,MenuPecheAvance:show,x144 y47 h180 w200
+
 return
 
 
 
 
+;#####################################################################################
+;                               MENU PARAMETRE
+;#####################################################################################
+
+
+
+
+MenuParametre:
+If MenuParametreShow=1
+    return
+ResetMenu()
+If MenuParametreShow=0
+    DeleteGui()
+MenuParametreShow=1
+
+Gui, MenuParametre:new
+Gui, +hwndMenuParametre +ToolWindow -Caption +Parent1 +lastfound
+HB_Button.Push(New Message(x:=45,y:=0,w:=105,h:=15,Window:="MenuParametre",Label:="",Text:="Source Audio",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=45,y:=45,w:=105,h:=15,Window:="MenuParametre",Label:="",Text:="Raccourcis",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=20,y:=60,w:=65,h:=15,Window:="MenuParametre",Label:="",Text:="Monture",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=120,y:=60,w:=65,h:=15,Window:="MenuParametre",Label:="",Text:="Appats",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=20,y:=104,w:=65,h:=15,Window:="MenuParametre",Label:="",Text:="Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=120,y:=104,w:=65,h:=15,Window:="MenuParametre",Label:="",Text:="Stop Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=57,y:=155,w:=90,h:=22,Window:="MenuParametre",Label:="SaveParametre",Text:="Sauvegarder",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+
+Gui, MenuParametre:add,hotkey,x30 y80 w46 h20  gHotkeyMonture vHotkeyMonture, %HotkeyMonture%
+Gui, MenuParametre:add,hotkey,x130 y80 w46 h20 gHotkeyAppats vHotkeyAppats, %HotkeyAppats%
+Gui, MenuParametre:add,hotkey,x30 y124  w46 h20 center gHotkeyCanne vHotkeyCanne, %HotkeyCanne%
+Gui, MenuParametre:add,hotkey,x130 y124  w46 h20 center gHotkeySTOP vHotkeySTOP, %HotkeySTOP%
+
+
+Gui,MenuParametre:add,Button,x0  y0    w170   h1 hide
+Gui, MenuParametre:Add, dropdownlist,x10 y18 w180 h1 r15 hwndDDL vSelectAudio gAudio , %devlist%
+Gui, MenuParametre:Add, Text, x15 y43 w170   h1    0x4
+Gui, MenuParametre:Add, Text, x15  y148 w170   h1    0x4
+Gui,MenuParametre:Color,00FF00
+WinSet, Transcolor , 00FF00
+Gui, MenuParametre:show,x144 y47 h180 w200
+GuiControl, MenuParametre:ChooseString, SelectAudio, %SelectAudio%
+Gui, Submit, NoHide
+CtlColors.Attach(DDL, "silver","purple")
+return
+
+
+
+
+;#####################################################################################
+;                                MENU VERSION
+;#####################################################################################
+
+
 MenuVersion:
-Gui,MenuPecheAvance:Destroy
-Gui,MenuPeche:Destroy
 If MenuVersionShow=1
     return
-MenuPecheShow=0
+ResetMenu()
+If MenuVersionShow=0
+    DeleteGui()
 MenuVersionShow=1
+
 Gui, MenuVersion:new
 Gui,+hwndMenuVersion +ToolWindow -Caption +Parent1 +lastfound
-HB_Button.Push(New Message(x:=0,y:=0,w:=200,h:=180,Window:="MenuVersion",Label:="",Text:="Patch Notes`n`n+ `n`n+ `n`n+ Ajout Selecteur Zone`n`n+ Ajout Hotkey Mont/Peche/Appats`n`n+",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Message(x:=0,y:=0,w:=200,h:=180,Window:="MenuVersion",Label:="",Text:="Patch Notes`n`n+ Ajout Menu Peche`n`n+ Ajout Menu Avancee`n`n+ Ajout Selecteur Zone`n`n+ Ajout Hotkey Mont/Peche/Appats`n`n+ Ajout Sauvegarde",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 Gui,MenuVersion:Color,00FF00
 WinSet, Transcolor, 00FF00
 Gui,MenuVersion:show,x144 y47 h180 w200
@@ -136,10 +313,14 @@ return
 
 
 
+;#####################################################################################
+;                                label
+;#####################################################################################
 
 
-
-
+HotkeySTOP:
+sleep 100
+send,{tab}
 return
 HotkeyMonture:
 sleep 100
@@ -156,6 +337,10 @@ return
 ;HB_Switch[2]
 
 BotPeche:
+If (OnOff=0)
+{
+Onoff()
+}
 VerifWoW()
 if (WowAbs=1)
     return
@@ -164,42 +349,63 @@ x1F=%xCoord%
 y1F=%yCoord%
 x2F:=(xCoord + wCoord)
 y2F:=(yCoord + hCoord)
+
 PecheWow()
 return
+
+SaveParametre:
+VerifWoW()
+if (WowAbs=1)
+    return
+IniWrite, %HotkeyMonture% ,Setting.ini, Raccourcis , Monture
+IniWrite, %HotkeyAppats% ,Setting.ini, Raccourcis , Appats
+IniWrite, %HotkeyCanne% ,Setting.ini, Raccourcis , Canne
+IniWrite, %HotkeySTOP% ,Setting.ini, Raccourcis , Stop
+IniWrite, %audioSource1% ,Setting.ini, Audio , AudioSource
+IniWrite, %SelectAudio% ,Setting.ini, Audio , SelectAudio
+
+Audio:
+Gui, Submit, NoHide
+SelectAudio := SelectAudio
+StringSplit, audioSource, SelectAudio, ":", .
+return
+
 
 
 Save:
 VerifWoW()
 if (WowAbs=1)
     return
-IniWrite, %xCoord% , Setting.ini,CoordZone,x
-IniWrite, %yCoord% , Setting.ini,CoordZone,y
-IniWrite, %wCoord% , Setting.ini,CoordZone,w
-IniWrite, %hCoord% , Setting.ini,CoordZone,h
-IniWrite, %HotkeyMonture% ,Setting.ini, Raccourcis , Monture
-IniWrite, %HotkeyAppats% ,Setting.ini, Raccourcis , Appats
-IniWrite, %HotkeyCanne% ,Setting.ini, Raccourcis , Canne
-
+IniWrite, %xCoordPeche% , Setting.ini,CoordZone,xCoordPeche
+IniWrite, %yCoordPeche% , Setting.ini,CoordZone,yCoordPeche
+IniWrite, %wCoordPeche% , Setting.ini,CoordZone,wCoordPeche
+IniWrite, %hCoordPeche% , Setting.ini,CoordZone,hCoordPeche
+IniWrite, %xCoordVente% , Setting.ini,CoordZone,xCoordVente
+IniWrite, %yCoordVente% , Setting.ini,CoordZone,yCoordVente
+IniWrite, %wCoordVente% , Setting.ini,CoordZone,wCoordVente
+IniWrite, %hCoordVente% , Setting.ini,CoordZone,hCoordVente
 goto MenuPeche
 return
 
 
 
 
-DrawZone:
+DrawZonePeche:
+{
 VerifWoW()
 if (WowAbs=1)
     return
-OnOff := !OnOff
-If (OnOff=1)
+OnOffP := !OnOffP
+If (OnOffP=1)
 {
-x1F=%xCoord%
-y1F=%yCoord%
-x2F:=(xCoord + wCoord)
-y2F:=(yCoord + hCoord)
+Gui, DrawP:destroy
+x1F=%xCoordPeche%
+y1F=%yCoordPeche%
+x2F:=(xCoordPeche + wCoordPeche)
+y2F:=(yCoordPeche + hCoordPeche)
 color := 0x4d000000
-Gui, Draw: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
-Gui, Draw: Show, NA
+Gui, DrawP: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, DrawP: Show, NA
 hwnd1 := WinExist()
 pToken := Gdip_Startup()
 hbm    := CreateDIBSection(Width, Height)
@@ -207,15 +413,15 @@ hdc    := CreateCompatibleDC()
 obm    := SelectObject(hdc, hbm)
 G      := Gdip_GraphicsFromHDC(hdc)
 Gdip_SetSmoothingMode(G, 4)
-Brush := Gdip_BrushCreateSolid( "0xCCCA2535" )
+Brush := Gdip_BrushCreateSolid( "0xD90080FD" )
 pPen   := Gdip_CreatePen(color, 10)
-	Gdip_FillRectangle( G , Brush , x1f-5 , y1f-10 , wCoord+10, 5 )    ;haut
+	Gdip_FillRectangle( G , Brush , x1f-5 , y1f-10 , wCoordPeche+10, 5 )    ;haut
 
-    Gdip_FillRectangle( G , Brush , x1f-10 , y1f-10 , 5, hcoord+20 )     ;gauche
+    Gdip_FillRectangle( G , Brush , x1f-10 , y1f-10 , 5, hcoordPeche+20 )     ;gauche
 
-    Gdip_FillRectangle( G , Brush , x2f+5 , y1f-10 , 5, hcoord+20 )     ;droit
+    Gdip_FillRectangle( G , Brush , x2f+5 , y1f-10 , 5, hcoordPeche+20 )     ;droit
 
-    Gdip_FillRectangle( G , Brush , x1f-5 , y2f+5 , wCoord+10, 5 )   ;bas
+    Gdip_FillRectangle( G , Brush , x1f-5 , y2f+5 , wCoordPeche+10, 5 )   ;bas
 	Gdip_DeleteBrush( Brush )
 UpdateLayeredWindow(hwnd1, hdc, 0, 0, Width, Height)
 Gdip_DeletePen(pPen), Gdip_DeleteBrush(hBrush)
@@ -223,18 +429,17 @@ SelectObject(hdc, obm), DeleteObject(hbm), DeleteDC(hdc), Gdip_DeleteGraphics(G)
 return
 }
 else
-    Gui,Draw:Destroy
+    Gui,DrawP:Destroy
+}
 return
-
-
-
-Zone:
-OnOff=0
+ZonePeche:
+{
 VerifWoW()
 if (WowAbs=1)
     return
-Gui, Draw: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
-Gui, Draw: Show, NA
+WinMinimize, Connector
+Gui, DrawP: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, DrawP: Show, NA
 hwnd1 := WinExist()
 hbm := CreateDIBSection(Width, Height)
 hdc := CreateCompatibleDC()
@@ -245,7 +450,7 @@ pBrush := Gdip_BrushCreateSolid(0xaa000000)
 Gdip_FillRoundedRectangle(G, pBrush, 0, 0, Width, Height, 20)
 Gdip_DeleteBrush(pBrush)
 Options = x10p y20p w80p Centre cffffffff r4 s50 Underline Italic
-Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Delimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
+Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Délimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
 UpdateLayeredWindow(hwnd1, hdc, (A_ScreenWidth-Width)//2, (A_ScreenHeight-Height)//2, Width, Height)
 SelectObject(hdc, obm)
 DeleteObject(hbm)
@@ -254,15 +459,15 @@ Gdip_DeleteGraphics(G)
 WinActivate, World of Warcraft
 WinWait, World of Warcraft,, A
 KeyWait, Alt, D
-Gui, Draw:destroy
+Gui, DrawP:destroy
 MouseGetPos, X1,Y1
 Loop {
 MouseGetPos, X2,Y2
-xCoord := x1, yCoord := y1, wCoord := x2-x1, hCoord := y2-y1
+xCoordPeche := x1, yCoordPeche := y1, wCoordPeche := x2-x1, hCoordPeche := y2-y1
 color := 0x4d000000
 
-Gui, Draw: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
-Gui, Draw: Show, NA
+Gui, DrawP: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, DrawP: Show, NA
 hwnd1 := WinExist() ; The created window's handle
 
 ; Set up the bitmap
@@ -275,21 +480,126 @@ Gdip_SetSmoothingMode(G, 4)
 Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
 pPen   := Gdip_CreatePen(color, 10)
 hBrush := Gdip_BrushCreateSolid(color)
-Gdip_DrawRectangle(G, pPen,   xCoord, yCoord, wCoord, hCoord)
-Gdip_FillRectangle(G, hBrush, xCoord, yCoord, wCoord, hCoord)
+Gdip_DrawRectangle(G, pPen,   xCoordPeche, yCoordPeche, wCoordPeche, hCoordPeche)
+Gdip_FillRectangle(G, hBrush, xCoordPeche, yCoordPeche, wCoordPeche, hCoordPeche)
 UpdateLayeredWindow(hwnd1, hdc, 0, 0, Width, Height)
 Gdip_DeletePen(pPen), Gdip_DeleteBrush(hBrush)
 SelectObject(hdc, obm), DeleteObject(hbm), DeleteDC(hdc), Gdip_DeleteGraphics(G)
 GetKeyState, state, LButton
 if (state = "D")
 {
-    Gui, Draw:destroy
+    Gui, DrawP:destroy
     WinActivate, Connector
     break
 }
 }
+}
 return
+DrawZoneVente:
+{
+VerifWoW()
+if (WowAbs=1)
+    return
+OnOffV := !OnOffV
+If (OnOffV=1)
+{
+Gui, Draw:destroy
+x1F=%xCoordVente%
+y1F=%yCoordVente%
+x2F:=(xCoordVente + wCoordVente)
+y2F:=(yCoordVente + hCoordVente)
+color := 0x4d000000
+Gui, DrawV: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, DrawV: Show, NA
+hwnd1 := WinExist()
+pToken := Gdip_Startup()
+hbm    := CreateDIBSection(Width, Height)
+hdc    := CreateCompatibleDC()
+obm    := SelectObject(hdc, hbm)
+G      := Gdip_GraphicsFromHDC(hdc)
+Gdip_SetSmoothingMode(G, 4)
+Brush := Gdip_BrushCreateSolid( "0xD900EF26" )
+pPen   := Gdip_CreatePen(color, 10)
+	Gdip_FillRectangle( G , Brush , x1f-5 , y1f-10 , wCoordVente+10, 5 )    ;haut
 
+    Gdip_FillRectangle( G , Brush , x1f-10 , y1f-10 , 5, hcoordVente+20 )     ;gauche
+
+    Gdip_FillRectangle( G , Brush , x2f+5 , y1f-10 , 5, hcoordVente+20 )     ;droit
+
+    Gdip_FillRectangle( G , Brush , x1f-5 , y2f+5 , wCoordVente+10, 5 )   ;bas
+	Gdip_DeleteBrush( Brush )
+UpdateLayeredWindow(hwnd1, hdc, 0, 0, Width, Height)
+Gdip_DeletePen(pPen), Gdip_DeleteBrush(hBrush)
+SelectObject(hdc, obm), DeleteObject(hbm), DeleteDC(hdc), Gdip_DeleteGraphics(G)
+return
+}
+else
+    Gui,DrawV:Destroy
+}
+return
+ZoneVente:
+{
+VerifWoW()
+if (WowAbs=1)
+    return
+WinMinimize, Connector
+Gui, DrawV: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, DrawV: Show, NA
+hwnd1 := WinExist()
+hbm := CreateDIBSection(Width, Height)
+hdc := CreateCompatibleDC()
+obm := SelectObject(hdc, hbm)
+G := Gdip_GraphicsFromHDC(hdc)
+Gdip_SetSmoothingMode(G, 4)
+pBrush := Gdip_BrushCreateSolid(0xaa000000)
+Gdip_FillRoundedRectangle(G, pBrush, 0, 0, Width, Height, 20)
+Gdip_DeleteBrush(pBrush)
+Options = x10p y20p w80p Centre cffffffff r4 s50 Underline Italic
+Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Délimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
+UpdateLayeredWindow(hwnd1, hdc, (A_ScreenWidth-Width)//2, (A_ScreenHeight-Height)//2, Width, Height)
+SelectObject(hdc, obm)
+DeleteObject(hbm)
+DeleteDC(hdc)
+Gdip_DeleteGraphics(G)
+WinActivate, World of Warcraft
+WinWait, World of Warcraft,, A
+KeyWait, Alt, D
+Gui, DrawV:destroy
+MouseGetPos, X1,Y1
+Loop {
+MouseGetPos, X2,Y2
+xCoordVente := x1, yCoordVente := y1, wCoordVente := x2-x1, hCoordVente := y2-y1
+color := 0x4d000000
+
+Gui, DrawV: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
+Gui, DrawV: Show, NA
+hwnd1 := WinExist() ; The created window's handle
+
+; Set up the bitmap
+pToken := Gdip_Startup()
+hbm    := CreateDIBSection(Width, Height)  ; The GDI bitmap
+hdc    := CreateCompatibleDC()                         ; Device context compatible with screen
+obm    := SelectObject(hdc, hbm)                       ; Select bitmap into device context
+G      := Gdip_GraphicsFromHDC(hdc)                    ; Get pointer to graphics of bitmap
+Gdip_SetSmoothingMode(G, 4)
+Brush := Gdip_BrushCreateSolid( "0xFFFFFFFF" )
+pPen   := Gdip_CreatePen(color, 10)
+hBrush := Gdip_BrushCreateSolid(color)
+Gdip_DrawRectangle(G, pPen,   xCoordVente, yCoordVente, wCoordVente, hCoordVente)
+Gdip_FillRectangle(G, hBrush, xCoordVente, yCoordVente, wCoordVente, hCoordVente)
+UpdateLayeredWindow(hwnd1, hdc, 0, 0, Width, Height)
+Gdip_DeletePen(pPen), Gdip_DeleteBrush(hBrush)
+SelectObject(hdc, obm), DeleteObject(hbm), DeleteDC(hdc), Gdip_DeleteGraphics(G)
+GetKeyState, state, LButton
+if (state = "D")
+{
+    Gui, DrawV:destroy
+    WinActivate, Connector
+    break
+}
+}
+}
+return
 
 Return:
 return
@@ -305,6 +615,49 @@ FileSetAttrib, -R, Main.ahk
 FileDelete, Main.ahk
 ExitApp
 
+
+
+
+;#####################################################################################
+;                                FONCTION
+;#####################################################################################
+
+
+
+
+OnOffVerif(){
+    if OnOff=1
+{
+    GuiControl,hide,% HB_Button[6].hwnd
+    GuiControl,show,% HB_Button[7].hwnd
+   }
+else
+{
+    GuiControl,show,% HB_Button[6].hwnd
+    GuiControl,hide,% HB_Button[7].hwnd
+   }
+}
+OnOff(){
+    global
+OnOff:=!OnOff
+OnOffVerif()
+}
+DeleteGui(){
+    global
+    OnOff.removeAt(0,2)
+    HB_Button.removeAt(5,50)
+    Gui,MenuPeche:Destroy
+    Gui,MenuVersion:Destroy
+    Gui,MenuPecheAvance:Destroy
+    Gui,MenuParametre:Destroy
+}
+ResetMenu(){
+    global
+    MenuParametreShow=0
+    MenuPecheShow=0
+    MenuPecheAvanceShow=0
+    MenuVersionShow=0
+}
 VerifWow(){
     global
  IfWinNotExist, World of Warcraft
@@ -312,23 +665,17 @@ VerifWow(){
     MsgBox Veuillez lancer World of Warcraft
     WowAbs=1
 }
-else
-{
-WowAbs=0
-WinActivate, World of Warcraft
-WinWait, World of Warcraft,, A
-}
 }
 PecheWow(){
   global
-  resetx= x0
-  resety= y0
+  resetx=x0
+  resety=y500
   afk=0
 send,{click}
 sleep 1000
 send, %HotkeyCanne%
 MouseMove, %RESETx%, %RESETy%
-sleep 5000
+Sleep 500
 thiscursor1:=QueryMouseCursor()
 Loop{
 thiscursor:=QueryMouseCursor()
@@ -350,12 +697,19 @@ x1F+=0.5
     {
         gosub BotPeche
     }
+    If OnOff=0
+    {
+    ToolTip
+    OnOffVerif()
+    break
+}
 }
 else
 	break
 }
+
 sleep 1000
-audioMeter := VA_GetAudioMeter("playback:2")
+audioMeter := VA_GetAudioMeter(audioSource1)
 VA_IAudioMeterInformation_GetMeteringChannelCount(audioMeter, 1)
 VA_GetDevicePeriod("capture", devicePeriod)
 Loop
@@ -375,18 +729,24 @@ Loop
 
    if (A_TimeIdle > 25000)
     {
-    tooltip
+    ToolTip
     gosub BotPeche
 }
 	if (meter>=0.20)
 	{
-	tooltip
+    ToolTip
     sleep 1000
     gosub BotPeche
 }
+    If OnOff=0
+    {
+    OnOffVerif()
+    ToolTip
+    break
+}
+}
 }
 
-}
 AppatsPoisson(){
     Send %HotkeyAppats%
     sleep 1000
