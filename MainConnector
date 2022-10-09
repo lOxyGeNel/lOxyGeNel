@@ -3,6 +3,7 @@ SetBatchLines -1
 SendMode Input
 CoordMode, window
 #MaxThreadsPerHotkey 3
+SetTitleMatchMode, 1
 
 pToken:=Gdip_Startup()
 global HB_Button:=[]
@@ -63,25 +64,25 @@ HotkeyAssign()
 ;#####################################################################################
 ;                               MAIN MENU
 ;#####################################################################################
-gui,1:new
-Gui,1: -Caption +LastFound +hwndParent +AlwaysOntop
-Gui, 1:Add, Text, 0xE w500 h300 hwndhsplash
+gui,Connector:new
+Gui,Connector: -Caption +LastFound +hwndParent +AlwaysOntop
+Gui, Connector:Add, Text, 0xE w500 h300 hwndhsplash
 SendMessage, 0x172, 0, hBitmap,, ahk_id %hsplash% ; STM_SETIMAGE = 0x172
 Gui, Font, s9 Bold, Comfortaa
-Gui,1:Color,00FF00
+Gui,Connector:Color,00FF00
 WinSet, Transcolor, 00FF00
 
 
 
-HB_Button.Push(New Button_Type_69(x:=33,y:=55,w:=86,h:=22,Window:="1",Label:="MenuPeche",Text:="Peche",Font:="",Font_Size:="",Font_Color_Top:="",Font_Color_Bottom:="",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuParametre",Text:="Parametres",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuVersion",Text:="Version",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=33,y:=55,w:=86,h:=22,Window:="Connector",Label:="MenuPeche",Text:="Peche",Font:="",Font_Size:="",Font_Color_Top:="",Font_Color_Bottom:="",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="Connector",Label:="MenuParametre",Text:="Parametres",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="Connector",Label:="MenuVersion",Text:="Version",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
-HB_Button.Push(New Button_Type_Minimize(x:=310,y:=16,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_Exit(x:=330,y:=16,w:=15,h:=15,Window:="1",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_Minimize(x:=310,y:=16,w:=15,h:=15,Window:="Connector",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_Exit(x:=330,y:=16,w:=15,h:=15,Window:="Connector",Label:="Exit",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
-Gui,1:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
-Gui,1:show,x%xWindows% y%yWindows% w357 h245,Connector
+Gui,Connector:Add,Text,x4 y4 w343 h27 +BackgroundTrans gMoveWin,
+Gui,Connector:show,x%xWindows% y%yWindows% w357 h245,Connector
 Settimer,HB_Hover_Function,25
 gosub MenuVersion
 return
@@ -100,13 +101,14 @@ ResetMenu()
 If MenuPecheShow=0
     DeleteGui()
 MenuPecheShow=1
+MenuPecheVAR=1
 
 Gui, MenuPeche:new
-Gui, MenuPeche:+hwndMenuPeche +ToolWindow -Caption +Parent1 +lastfound
+Gui, MenuPeche:+hwndMenuPeche +ToolWindow -Caption +ParentConnector +lastfound
 HB_Button.Push(New Button_Type_69(x:=37,y:=120,w:=125,h:=22,Window:="MenuPeche",Label:="MenuPecheAvance",Text:="Options Avancees",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 
-HB_Button.Push(New Button_Type_69(x:=10,y+=+35,w:=180,h:=22,Window:="MenuPeche",Label:="BotPeche",Text:="Start Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y+=+35,w:=180,h:=22,Window:="MenuPeche",Label:="BotPecheStart",Text:="Start Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=10,y:=155,w:=180,h:=22,Window:="MenuPeche",Label:="BotPecheOff",Text:="Stop Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 
@@ -137,7 +139,7 @@ If MenuPecheAvanceShow=0
 MenuPecheAvanceShow=1
 
 Gui, MenuPecheAvance:new
-Gui,+hwndMenuPecheAvance +ToolWindow -Caption +Parent1 +lastfound
+Gui,+hwndMenuPecheAvance +ToolWindow -Caption +ParentConnector +lastfound
 HB_Button.Push(New Message(x:=45,y:=0,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Zone De Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Message(x:=45,y:=65,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Zone De Vente",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=10,y:=20,w:=80,h:=35,Window:="MenuPecheAvance",Label:="ZonePeche",Text:="Delimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -179,7 +181,7 @@ If MenuParametreShow=0
 MenuParametreShow=1
 
 Gui, MenuParametre:new
-Gui, +hwndMenuParametre +ToolWindow -Caption +Parent1 +lastfound
+Gui, +hwndMenuParametre +ToolWindow -Caption +ParentConnector +lastfound
 HB_Button.Push(New Message(x:=45,y:=0,w:=105,h:=15,Window:="MenuParametre",Label:="",Text:="Source Audio",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Message(x:=45,y:=45,w:=105,h:=15,Window:="MenuParametre",Label:="",Text:="Raccourcis",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Message(x:=20,y:=60,w:=65,h:=15,Window:="MenuParametre",Label:="",Text:="Monture",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -222,7 +224,7 @@ If MenuVersionShow=0
 MenuVersionShow=1
 
 Gui, MenuVersion:new
-Gui,+hwndMenuVersion +ToolWindow -Caption +Parent1 +lastfound
+Gui,+hwndMenuVersion +ToolWindow -Caption +ParentConnector +lastfound
 HB_Button.Push(New Message(x:=0,y:=0,w:=200,h:=180,Window:="MenuVersion",Label:="",Text:="Patch Notes`n`n+ Ajout Menu Peche`n`n+ Ajout Menu Avancee`n`n+ Ajout Selecteur Zone`n`n+ Ajout Hotkey Mont/Peche/Appats`n`n+ Ajout Sauvegarde",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 Gui,MenuVersion:Color,00FF00
 WinSet, Transcolor, 00FF00
@@ -240,6 +242,7 @@ return
 OnOff:
 if onoff=1
 {
+WinActivate Connector
 OnOff()
 }
 return
@@ -263,14 +266,16 @@ return
 BotPecheOff:
 Onoff()
 return
-BotPeche:
+BotPecheStart:
+Onoff()
+sleep 100
+WinMinimize, Connector
+WinActivate, Ahk_exe Wow.exe
+Botpeche:
 If (OnOff=0)
 {
 Onoff()
 }
-
-
-WinMinimize, Connector
 x1F=%xCoordPeche%
 y1F=%yCoordPeche%
 x2F:=(xCoordPeche + wCoordPeche)
@@ -377,7 +382,7 @@ SelectObject(hdc, obm)
 DeleteObject(hbm)
 DeleteDC(hdc)
 Gdip_DeleteGraphics(G)
-WinActivate, World of Warcraft
+WinActivate, Ahk_exe Wow.exe
 WinWait, World of Warcraft,, A
 KeyWait, Alt, D
 Gui, DrawP:destroy
@@ -478,7 +483,7 @@ SelectObject(hdc, obm)
 DeleteObject(hbm)
 DeleteDC(hdc)
 Gdip_DeleteGraphics(G)
-WinActivate, World of Warcraft
+WinActivate, Ahk_exe Wow.exe
 WinWait, World of Warcraft,, A
 KeyWait, Alt, D
 Gui, DrawV:destroy
@@ -568,9 +573,8 @@ else
 OnOff(){
     global
 OnOff:=!OnOff
-IfWinExist ahk_id %MenuPeche%
+if (MenuPecheVAR=1)
 {
-    WinActivate, Connector
     OnOffVerif()
 }
 }
@@ -582,6 +586,7 @@ DeleteGui(){
     Gui,MenuVersion:Destroy
     Gui,MenuPecheAvance:Destroy
     Gui,MenuParametre:Destroy
+    MenuPecheVAR=0
 }
 ResetMenu(){
     global
@@ -609,6 +614,12 @@ if (thiscursor=thiscursor1)
 {
 x1F+=0.5
 	MouseMove,%x1F%,%y1F%
+        If OnOff=0
+    {
+    ToolTip
+    OnOffVerif()
+    break
+    }
 	if (x1F>=x2F)
 	{
 		y1F+=30
@@ -624,12 +635,6 @@ x1F+=0.5
 
         gosub BotPeche
     }
-    If OnOff=0
-    {
-    ToolTip
-    OnOffVerif()
-    break
-}
 }
 else
 	break
