@@ -3,13 +3,16 @@ SetBatchLines -1
 SendMode Input
 CoordMode, window
 #MaxThreadsPerHotkey 3
-SetTitleMatchMode, 1
+;SetTitleMatchMode, 1
 
 pToken:=Gdip_Startup()
 global HB_Button:=[]
 global HB_Switch:=[]
-
 global OnOff=0
+
+doc := "1YcqwIvJlbq1wmKvIyTNGLGkzzZLBYRuhm1f5IFcma6s", sht := "0"
+
+
 
 While (dev := VA_GetDevice("playback:" A_Index))
 {
@@ -57,7 +60,7 @@ IniRead, HotkeySTOP ,Setting.ini, Raccourcis , Stop
 IniRead, audioSource1 ,Setting.ini, Audio , AudioSource
 IniRead, SelectAudio ,Setting.ini, Audio , SelectAudio
 HotkeyAssign()
-
+audiosource1=playback:%audiosource1%
 
 
 
@@ -112,8 +115,10 @@ HB_Button.Push(New Button_Type_69(x:=10,y+=+35,w:=180,h:=22,Window:="MenuPeche",
 HB_Button.Push(New Button_Type_69(x:=10,y:=155,w:=180,h:=22,Window:="MenuPeche",Label:="BotPecheOff",Text:="Stop Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 
-HB_Switch[1] :=(New Flat_Round_Switch_Type_1(x:=2,y:=6,w:=2 h:=1,Text:="Vendre Item Gris",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
-HB_Switch[2] :=(New Flat_Round_Switch_Type_1(x:=2,y+=+20,w:=2 h:=1,Text:="Appats Automatique",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
+HB_Switch[1] :=(New Flat_Round_Switch_Type_1(x:=2,y:=6,w:=2 h:=1,Text:="Vente",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
+HB_Switch[2] :=(New Flat_Round_Switch_Type_1(x:=2,y+=+20,w:=2 h:=1,Text:="Appats",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
+HB_Switch[3] :=(New Flat_Round_Switch_Type_1(x:=2,y+=+20,w:=2 h:=1,Text:="Rarity",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
+Gui, MenuPeche:Add, Text, x100  y10    w1  h100    0x4
 Gui, MenuPeche:Add, Text, x15  y148    w170   h1    0x4
 Gui,MenuPeche:Color,00FF00
 WinSet, Transcolor, 00FF00
@@ -121,7 +126,10 @@ Gui,MenuPeche:show,x144 y47 h180 w200
 OnOffVerif()
 return
 
-
+a::
+if(HB_Switch[3].state=1)
+    senddiscord()
+return
 
 
 
@@ -268,6 +276,8 @@ Onoff()
 return
 BotPecheStart:
 Onoff()
+if (HB_Switch[3].state=1)
+    ScreenSource()
 sleep 100
 WinMinimize, Connector
 WinActivate, Ahk_exe Wow.exe
@@ -276,11 +286,14 @@ If (OnOff=0)
 {
 Onoff()
 }
+if (HB_Switch[3].state=1)
+    ScreenSend()
 x1F=%xCoordPeche%
 y1F=%yCoordPeche%
 x2F:=(xCoordPeche + wCoordPeche)
 y2F:=(yCoordPeche + hCoordPeche)
 PecheWow()
+goto Botpeche
 return
 
 SaveParametre:
@@ -292,6 +305,7 @@ IniWrite, %HotkeySTOP% ,Setting.ini, Raccourcis , Stop
 IniWrite, %audioSource1% ,Setting.ini, Audio , AudioSource
 IniWrite, %SelectAudio% ,Setting.ini, Audio , SelectAudio
 HotkeyAssign()
+audiosource1=playback:%audiosource1%
 return
 
 
@@ -542,6 +556,80 @@ ExitApp
 ;#####################################################################################
 ;                                FONCTION
 ;#####################################################################################
+ScreenSource(){
+    global
+IfWinExist, ahk_exe wow.exe
+{
+WinGet, IDwowSource, PID,ahk_exe wow.exe
+}
+ScreenShot=0
+oWMI := ComObjGet("winmgmts:")
+oQueryEnum := oWMI.ExecQuery("Select * from Win32_Process where ProcessId=" IDwowSource)._NewEnum()
+if oQueryEnum[oProcess]
+	vPPath := oProcess.ExecutablePath
+oWMI := oQueryEnum := oProcess := ""
+file := vPPath	; added an extra folder level
+SplitPath, file, name, dir, ext, name_no_ext, drive
+DirScrenshoot = %dir%\Screenshots\*.*
+Loop,%DirScrenshoot%,1,1
+    ScreenShot++
+WoWSource:=ScreenShot
+}
+ScreenSend(){
+    global
+ScreenShot=0
+oWMI := ComObjGet("winmgmts:")
+oQueryEnum := oWMI.ExecQuery("Select * from Win32_Process where ProcessId=" IDwowFocus)._NewEnum()
+if oQueryEnum[oProcess]
+	vPPath := oProcess.ExecutablePath
+oWMI := oQueryEnum := oProcess := ""
+file := vPPath	; added an extra folder level
+SplitPath, file, name, dir, ext, name_no_ext, drive
+DirScrenshoot = %dir%\Screenshots\*.*
+Loop,%DirScrenshoot%,1,1
+    ScreenShot++
+WoWFocus:=ScreenShot
+
+If (WoWSource<WoWFocus)
+    SendDiscord()
+}
+IDUser(){
+    global
+IniRead, IDUser , ACCES.oxgn,ACCES, IDUser
+URLDownloadToFile,% "https://docs.google.com/spreadsheets/d/" doc "/export?format=csv&id=" doc "&gid=" sht, tmp.csv
+fileread, oVar, tmp.csv
+FileDelete, tmp.csv
+for x,y in strsplit(oVar,"`n","`r")
+	{
+    CODE := StrSplit(y,"`,")
+	if instr(y,IDUser,true)
+		loop, parse, y, CSV
+			{
+			row.push(a_loopfield)
+			ifequal,a_index,25,break
+			}
+    if (CODE.1=IDUser)
+    IDUser:= code.2
+}
+}
+
+SendDiscord(){
+    global
+IDUser()
+objParam := {content: "> ** ```Psst " iduser " ! Il semblerait que tu aies drop quelque chose.``` ** "}
+CreateFormData(PostData, hdr_ContentType, objParam)
+
+HTTP := ComObjCreate("WinHTTP.WinHTTPRequest.5.1")
+HTTP.Open("POST", "https://discord.com/api/webhooks/1028320088761307236/-giyEMjhsQECULwV4QqRTRLjel55L0zOP0OV_74IstXwnkASLfDxxUh8mxGMALukv0fY", true)
+HTTP.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko")
+HTTP.SetRequestHeader("Content-Type", hdr_ContentType)
+HTTP.SetRequestHeader("Pragma", "no-cache")
+HTTP.SetRequestHeader("Cache-Control", "no-cache, no-store")
+HTTP.SetRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT")
+HTTP.Send(PostData)
+HTTP.WaitForResponse()
+;msgbox % HTTP.ResponseText
+}
 
 
 
@@ -668,13 +756,13 @@ Loop
    if (A_TimeIdle > 25000)
     {
     ToolTip
-    gosub BotPeche
+    break
 }
 	if (meter>=0.20)
 	{
     ToolTip
     sleep 1000
-    gosub BotPeche
+    break
 }
 }
 }
@@ -687,6 +775,33 @@ AppatsPoisson(){
 MoveWin(){
 	PostMessage,0xA1,2
 }
+
+QueryMouseCursor()
+{
+	NumPut(VarSetCapacity(CurrentCursorStruct, A_PtrSize + 16), CurrentCursorStruct, "uInt")
+	DllCall("GetCursorInfo", "ptr", &CurrentCursorStruct)
+	return (numP:=NumGet(CurrentCursorStruct,  8))
+}
+	MakeMeter(fraction, size)
+{
+    global MeterLength
+    Loop % fraction*size
+        meter .= "|"
+    Loop % (1-fraction)*size
+        meter .= "."
+    meter .= "  " fraction
+    return meter
+}
+
+
+
+
+
+;##########################################################################################################################################################################
+;########################################################################################################################################################################## BOUTON GDIP
+;##########################################################################################################################################################################
+
+
 
 SousMenu(){
 	;Bitmap Created Using: HB Bitmap Maker
@@ -1266,7 +1381,7 @@ class Flat_Round_Switch_Type_1	{
 		This.State:=State
 		This.X:=x
 		This.Y:=y
-		This.W:=270
+		This.W:=90
 		This.H:=16
 		This.Text:=Text
 		This.Font:=Font
@@ -1392,28 +1507,102 @@ HB_Hover_Function(){
 }
 
 
-QueryMouseCursor()
-{
-	NumPut(VarSetCapacity(CurrentCursorStruct, A_PtrSize + 16), CurrentCursorStruct, "uInt")
-	DllCall("GetCursorInfo", "ptr", &CurrentCursorStruct)
-	return (numP:=NumGet(CurrentCursorStruct,  8))
+
+
+
+
+
+
+
+;##########################################################################################################################################################################
+;########################################################################################################################################################################## SEND DISCORD
+;##########################################################################################################################################################################
+
+
+
+CreateFormData(ByRef retData, ByRef retHeader, objParam) {
+	New CreateFormData(retData, retHeader, objParam)
 }
-	MakeMeter(fraction, size)
-{
-    global MeterLength
-    Loop % fraction*size
-        meter .= "|"
-    Loop % (1-fraction)*size
-        meter .= "."
-    meter .= "  " fraction
-    return meter
+
+Class CreateFormData {
+
+	__New(ByRef retData, ByRef retHeader, objParam) {
+
+		Local CRLF := "`r`n", i, k, v, str, pvData
+		; Create a random Boundary
+		Local Boundary := this.RandomBoundary()
+		Local BoundaryLine := "------------------------------" . Boundary
+
+    this.Len := 0 ; GMEM_ZEROINIT|GMEM_FIXED = 0x40
+    this.Ptr := DllCall( "GlobalAlloc", "UInt",0x40, "UInt",1, "Ptr"  )          ; allocate global memory
+
+		; Loop input paramters
+		For k, v in objParam
+		{
+			If IsObject(v) {
+				For i, FileName in v
+				{
+					str := BoundaryLine . CRLF
+					     . "Content-Disposition: form-data; name=""" . k . """; filename=""" . FileName . """" . CRLF
+					     . "Content-Type: " . this.MimeType(FileName) . CRLF . CRLF
+          this.StrPutUTF8( str )
+          this.LoadFromFile( Filename )
+          this.StrPutUTF8( CRLF )
+				}
+			} Else {
+				str := BoundaryLine . CRLF
+				     . "Content-Disposition: form-data; name=""" . k """" . CRLF . CRLF
+				     . v . CRLF
+        this.StrPutUTF8( str )
+			}
+		}
+
+		this.StrPutUTF8( BoundaryLine . "--" . CRLF )
+
+    ; Create a bytearray and copy data in to it.
+    retData := ComObjArray( 0x11, this.Len ) ; Create SAFEARRAY = VT_ARRAY|VT_UI1
+    pvData  := NumGet( ComObjValue( retData ) + 8 + A_PtrSize )
+    DllCall( "RtlMoveMemory", "Ptr",pvData, "Ptr",this.Ptr, "Ptr",this.Len )
+
+    this.Ptr := DllCall( "GlobalFree", "Ptr",this.Ptr, "Ptr" )                   ; free global memory
+
+    retHeader := "multipart/form-data; boundary=----------------------------" . Boundary
+	}
+
+  StrPutUTF8( str ) {
+    Local ReqSz := StrPut( str, "utf-8" ) - 1
+    this.Len += ReqSz                                  ; GMEM_ZEROINIT|GMEM_MOVEABLE = 0x42
+    this.Ptr := DllCall( "GlobalReAlloc", "Ptr",this.Ptr, "UInt",this.len + 1, "UInt", 0x42 )
+    StrPut( str, this.Ptr + this.len - ReqSz, ReqSz, "utf-8" )
+  }
+
+  LoadFromFile( Filename ) {
+    Local objFile := FileOpen( FileName, "r" )
+    this.Len += objFile.Length                     ; GMEM_ZEROINIT|GMEM_MOVEABLE = 0x42
+    this.Ptr := DllCall( "GlobalReAlloc", "Ptr",this.Ptr, "UInt",this.len, "UInt", 0x42 )
+    objFile.RawRead( this.Ptr + this.Len - objFile.length, objFile.length )
+    objFile.Close()
+  }
+
+	RandomBoundary() {
+		str := "0|1|2|3|4|5|6|7|8|9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z"
+		Sort, str, D| Random
+		str := StrReplace(str, "|")
+		Return SubStr(str, 1, 12)
+	}
+
+	MimeType(FileName) {
+		n := FileOpen(FileName, "r").ReadUInt()
+		Return (n        = 0x474E5089) ? "image/png"
+		     : (n        = 0x38464947) ? "image/gif"
+		     : (n&0xFFFF = 0x4D42    ) ? "image/bmp"
+		     : (n&0xFFFF = 0xD8FF    ) ? "image/jpeg"
+		     : (n&0xFFFF = 0x4949    ) ? "image/tiff"
+		     : (n&0xFFFF = 0x4D4D    ) ? "image/tiff"
+		     : "application/octet-stream"
+	}
+
 }
-
-
-
-
-
-
 
 ;##########################################################################################################################################################################
 ;########################################################################################################################################################################## VA - TRACKER SOUND
