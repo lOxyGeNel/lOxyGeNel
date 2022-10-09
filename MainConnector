@@ -641,7 +641,7 @@ x1F+=0.5
 	}
     if (afk=3)
     {
-        MsgBox u
+
         gosub BotPeche
     }
     If OnOff=0
