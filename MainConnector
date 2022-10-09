@@ -33,6 +33,12 @@ Width :=A_ScreenWidth
 Height := A_ScreenHeight
 
 
+HotkeyMonture=0
+HotkeyAppats=0
+HotkeyCanne=0
+HotkeySTOP=0
+
+
 
 
 IniRead, xCoordPeche , Setting.ini,CoordZone,xCoordPeche
@@ -49,17 +55,7 @@ IniRead, HotkeyCanne ,Setting.ini, Raccourcis , Canne
 IniRead, HotkeySTOP ,Setting.ini, Raccourcis , Stop
 IniRead, audioSource1 ,Setting.ini, Audio , AudioSource
 IniRead, SelectAudio ,Setting.ini, Audio , SelectAudio
-
-
-
-
-If (HotkeyStop="")
-{
-HotkeySTOP=Escape
-Hotkey,%HotkeyStop%,OnOff
-}
-
-
+HotkeyAssign()
 
 
 
@@ -78,7 +74,7 @@ WinSet, Transcolor, 00FF00
 
 
 HB_Button.Push(New Button_Type_69(x:=33,y:=55,w:=86,h:=22,Window:="1",Label:="MenuPeche",Text:="Peche",Font:="",Font_Size:="",Font_Color_Top:="",Font_Color_Bottom:="",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuParametre",Text:="Parametre",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuParametre",Text:="Parametres",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=33,y+=+29,w:=86,h:=22,Window:="1",Label:="MenuVersion",Text:="Version",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 HB_Button.Push(New Button_Type_Minimize(x:=310,y:=16,w:=15,h:=15,Window:="1",Label:="WinMinimize",Text:="Button",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -106,12 +102,12 @@ If MenuPecheShow=0
 MenuPecheShow=1
 
 Gui, MenuPeche:new
-Gui,+hwndMenuPeche +ToolWindow -Caption +Parent1 +lastfound
+Gui, MenuPeche:+hwndMenuPeche +ToolWindow -Caption +Parent1 +lastfound
 HB_Button.Push(New Button_Type_69(x:=37,y:=120,w:=125,h:=22,Window:="MenuPeche",Label:="MenuPecheAvance",Text:="Options Avancees",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 
 HB_Button.Push(New Button_Type_69(x:=10,y+=+35,w:=180,h:=22,Window:="MenuPeche",Label:="BotPeche",Text:="Start Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=10,y:=155,w:=180,h:=22,Window:="MenuPeche",Label:="BotPeche",Text:="Stop Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y:=155,w:=180,h:=22,Window:="MenuPeche",Label:="BotPecheOff",Text:="Stop Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 
 HB_Switch[1] :=(New Flat_Round_Switch_Type_1(x:=2,y:=6,w:=2 h:=1,Text:="Vendre Item Gris",Font:="Comfortaa",FontSize:= "12 Bold" , FontColor:="FFFFFF" ,Window:="MenuPeche",Background_Color:="0xFF4C4F54",State:=0))
@@ -122,26 +118,6 @@ WinSet, Transcolor, 00FF00
 Gui,MenuPeche:show,x144 y47 h180 w200
 OnOffVerif()
 return
-
-
-OnOff:
-if onoff=1
-{
-OnOff()
-OnOffverif()
-}
-return
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -164,10 +140,10 @@ Gui, MenuPecheAvance:new
 Gui,+hwndMenuPecheAvance +ToolWindow -Caption +Parent1 +lastfound
 HB_Button.Push(New Message(x:=45,y:=0,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Zone De Peche",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Message(x:=45,y:=65,w:=105,h:=15,Window:="MenuPecheAvance",Label:="",Text:="Zone De Vente",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
-HB_Button.Push(New Button_Type_69(x:=10,y:=20,w:=80,h:=35,Window:="MenuPecheAvance",Label:="ZonePeche",Text:="Délimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y:=20,w:=80,h:=35,Window:="MenuPecheAvance",Label:="ZonePeche",Text:="Delimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x+=+100,y:=20,w:=80,h:=35,Window:="MenuPecheAvance",Label:="DrawZonePeche",Text:="Afficher Zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
-HB_Button.Push(New Button_Type_69(x:=10,y:=85,w:=80,h:=35,Window:="MenuPecheAvance",Label:="ZoneVente",Text:="Délimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
+HB_Button.Push(New Button_Type_69(x:=10,y:=85,w:=80,h:=35,Window:="MenuPecheAvance",Label:="ZoneVente",Text:="Delimiter une zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x+=+100,y:=85,w:=80,h:=35,Window:="MenuPecheAvance",Label:="DrawZoneVente",Text:="Afficher Zone",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
 HB_Button.Push(New Button_Type_69(x:=57,y:=155,w:=90,h:=22,Window:="MenuPecheAvance",Label:="Save",Text:="Sauvegarder",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
@@ -212,13 +188,13 @@ HB_Button.Push(New Message(x:=20,y:=104,w:=65,h:=15,Window:="MenuParametre",Labe
 HB_Button.Push(New Message(x:=120,y:=104,w:=65,h:=15,Window:="MenuParametre",Label:="",Text:="Stop Bot",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 HB_Button.Push(New Button_Type_69(x:=57,y:=155,w:=90,h:=22,Window:="MenuParametre",Label:="SaveParametre",Text:="Sauvegarder",Font:="Arial",Font_Size:="12 Bold",Font_Color_Top:="BF5205",Font_Color_Bottom:="FFFFFF",Button_Background_Color,RoundNess:=2))
 
-Gui, MenuParametre:add,hotkey,x30 y80 w46 h20  gHotkeyMonture vHotkeyMonture, %HotkeyMonture%
+Gui, MenuParametre:add,hotkey,x30 y80 w46 h20  gHotkeyMonture vHotkeyMonture Limit128, %HotkeyMonture%
 Gui, MenuParametre:add,hotkey,x130 y80 w46 h20 gHotkeyAppats vHotkeyAppats, %HotkeyAppats%
 Gui, MenuParametre:add,hotkey,x30 y124  w46 h20 center gHotkeyCanne vHotkeyCanne, %HotkeyCanne%
-Gui, MenuParametre:add,hotkey,x130 y124  w46 h20 center gHotkeySTOP vHotkeySTOP, %HotkeySTOP%
+Gui, MenuParametre:add,hotkey,x130 y124  w46 h20 center gHotkeySTOP hwndHotkeyStop vHotkeySTOP, %HotkeySTOP%
 
 
-Gui,MenuParametre:add,Button,x0  y0    w170   h1 hide
+Gui,MenuParametre:add,Button,x0  y0    w170   h1 hide vHIDEBUTTON
 Gui, MenuParametre:Add, dropdownlist,x10 y18 w180 h1 r15 hwndDDL vSelectAudio gAudio , %devlist%
 Gui, MenuParametre:Add, Text, x15 y43 w170   h1    0x4
 Gui, MenuParametre:Add, Text, x15  y148 w170   h1    0x4
@@ -229,7 +205,6 @@ GuiControl, MenuParametre:ChooseString, SelectAudio, %SelectAudio%
 Gui, Submit, NoHide
 CtlColors.Attach(DDL, "silver","purple")
 return
-
 
 
 
@@ -262,29 +237,38 @@ return
 ;#####################################################################################
 
 
+OnOff:
+if onoff=1
+{
+OnOff()
+}
+return
+
+
 HotkeySTOP:
-sleep 100
-send,{tab}
+HotkeyAssign()
+GuiControl, MenuParametre:focus, HIDEBUTTON
 return
 HotkeyMonture:
-sleep 100
-send,{tab}
+GuiControl, MenuParametre:focus, HIDEBUTTON
 return
 HotkeyAppats:
-sleep 100
-send,{tab}
+GuiControl, MenuParametre:focus, HIDEBUTTON
 return
 HotkeyCanne:
-sleep 100
-send,{tab}
+GuiControl, MenuParametre:focus, HIDEBUTTON
 return
 ;HB_Switch[2]
 
+BotPecheOff:
+Onoff()
+return
 BotPeche:
 If (OnOff=0)
 {
 Onoff()
 }
+
 VerifWoW()
 if (WowAbs=1)
     return
@@ -293,7 +277,6 @@ x1F=%xCoordPeche%
 y1F=%yCoordPeche%
 x2F:=(xCoordPeche + wCoordPeche)
 y2F:=(yCoordPeche + hCoordPeche)
-
 PecheWow()
 return
 
@@ -307,11 +290,15 @@ IniWrite, %HotkeyCanne% ,Setting.ini, Raccourcis , Canne
 IniWrite, %HotkeySTOP% ,Setting.ini, Raccourcis , Stop
 IniWrite, %audioSource1% ,Setting.ini, Audio , AudioSource
 IniWrite, %SelectAudio% ,Setting.ini, Audio , SelectAudio
+HotkeyAssign()
+return
+
 
 Audio:
 Gui, Submit, NoHide
 SelectAudio := SelectAudio
 StringSplit, audioSource, SelectAudio, ":", .
+GuiControl, MenuParametre:focus, HIDEBUTTON
 return
 
 
@@ -394,7 +381,7 @@ pBrush := Gdip_BrushCreateSolid(0xaa000000)
 Gdip_FillRoundedRectangle(G, pBrush, 0, 0, Width, Height, 20)
 Gdip_DeleteBrush(pBrush)
 Options = x10p y20p w80p Centre cffffffff r4 s50 Underline Italic
-Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Délimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
+Gdip_TextToGraphics(G, "Appuyer sur ALT pour commencer a Delimiter une zone `n Faite un click gauche une fois fini.", Options, "Comfortaa", Width, Height)
 UpdateLayeredWindow(hwnd1, hdc, (A_ScreenWidth-Width)//2, (A_ScreenHeight-Height)//2, Width, Height)
 SelectObject(hdc, obm)
 DeleteObject(hbm)
@@ -567,7 +554,19 @@ ExitApp
 
 
 
-
+HotkeyAssign(){
+    global
+If (HotkeySTOP="ERROR" or HotkeySTOP="")
+{
+HotkeySTOP=Escape
+Hotkey,~%HotkeyStop%,OnOff
+GuiControl,MenuParametre:,HotkeySTOP,%HotkeyStop%
+}
+else
+{
+    Hotkey,%HotkeyStop%,OnOff
+}
+}
 OnOffVerif(){
     if OnOff=1
 {
@@ -576,14 +575,18 @@ OnOffVerif(){
    }
 else
 {
-    GuiControl,show,% HB_Button[6].hwnd
     GuiControl,hide,% HB_Button[7].hwnd
+    GuiControl,show,% HB_Button[6].hwnd
    }
 }
 OnOff(){
     global
 OnOff:=!OnOff
-OnOffVerif()
+IfWinExist ahk_id %MenuPeche%
+{
+    WinActivate, Connector
+    OnOffVerif()
+}
 }
 DeleteGui(){
     global
@@ -638,6 +641,7 @@ x1F+=0.5
 	}
     if (afk=3)
     {
+        MsgBox u
         gosub BotPeche
     }
     If OnOff=0
@@ -657,6 +661,12 @@ VA_IAudioMeterInformation_GetMeteringChannelCount(audioMeter, 1)
 VA_GetDevicePeriod("capture", devicePeriod)
 Loop
 {
+        If OnOff=0
+    {
+    OnOffVerif()
+    ToolTip
+    break
+    }
     ; Get the peak value across all channels.
     VA_IAudioMeterInformation_GetPeakValue(audioMeter, peakValue)
     meter := MakeMeter(peakValue, MeterLength)
@@ -680,12 +690,6 @@ Loop
     ToolTip
     sleep 1000
     gosub BotPeche
-}
-    If OnOff=0
-    {
-    OnOffVerif()
-    ToolTip
-    break
 }
 }
 }
