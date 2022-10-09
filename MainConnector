@@ -269,9 +269,7 @@ If (OnOff=0)
 Onoff()
 }
 
-VerifWoW()
-if (WowAbs=1)
-    return
+
 WinMinimize, Connector
 x1F=%xCoordPeche%
 y1F=%yCoordPeche%
@@ -281,9 +279,7 @@ PecheWow()
 return
 
 SaveParametre:
-VerifWoW()
-if (WowAbs=1)
-    return
+
 IniWrite, %HotkeyMonture% ,Setting.ini, Raccourcis , Monture
 IniWrite, %HotkeyAppats% ,Setting.ini, Raccourcis , Appats
 IniWrite, %HotkeyCanne% ,Setting.ini, Raccourcis , Canne
@@ -304,9 +300,7 @@ return
 
 
 Save:
-VerifWoW()
-if (WowAbs=1)
-    return
+
 IniWrite, %xCoordPeche% , Setting.ini,CoordZone,xCoordPeche
 IniWrite, %yCoordPeche% , Setting.ini,CoordZone,yCoordPeche
 IniWrite, %wCoordPeche% , Setting.ini,CoordZone,wCoordPeche
@@ -323,9 +317,7 @@ return
 
 DrawZonePeche:
 {
-VerifWoW()
-if (WowAbs=1)
-    return
+
 OnOffP := !OnOffP
 If (OnOffP=1)
 {
@@ -365,9 +357,7 @@ else
 return
 ZonePeche:
 {
-VerifWoW()
-if (WowAbs=1)
-    return
+
 WinMinimize, Connector
 Gui, DrawP: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
 Gui, DrawP: Show, NA
@@ -428,9 +418,7 @@ if (state = "D")
 return
 DrawZoneVente:
 {
-VerifWoW()
-if (WowAbs=1)
-    return
+
 OnOffV := !OnOffV
 If (OnOffV=1)
 {
@@ -470,9 +458,7 @@ else
 return
 ZoneVente:
 {
-VerifWoW()
-if (WowAbs=1)
-    return
+
 WinMinimize, Connector
 Gui, DrawV: -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs ; Layered window
 Gui, DrawV: Show, NA
@@ -604,14 +590,8 @@ ResetMenu(){
     MenuPecheAvanceShow=0
     MenuVersionShow=0
 }
-VerifWow(){
-    global
- IfWinNotExist, World of Warcraft
-{
-    MsgBox Veuillez lancer World of Warcraft
-    WowAbs=1
-}
-}
+
+
 PecheWow(){
   global
   resetx=x0
